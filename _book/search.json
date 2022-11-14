@@ -1,0 +1,30 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Data cleaning for social scientists",
+    "section": "",
+    "text": "This is the script for a two-day workshop on data cleaning for the social sciences. I assume you to be familiar with basic R concepts such as the different data types and how to index them, the general structure of the syntax, and how to make function calls.\nIn the 21st century, social scientists are able to tap into wells of data that are deeper than ever before. Not only can we use more designed data, i.e., data that have been generated with the clear goal of performing research using them, such as survey data, than ever. Also the rise of the internet as a sensor for human behavior provides us with new opportunities.\nGiven their variety, these data sets may all come in different structures, and if we want to leverage them to improve our understanding of the world, we need to reshape them properly. Therefore, we are in need for tools that are capable and flexible enough to work with all different kinds of data while remaining easily accessible. In my opinion, R (R Core Team 2017), RStudio, and the tidyverse packages (Wickham et al. 2019) strike a good balance here. R provides a powerful, flexible, statistical programming language, RStudio serves as a convenient Graphic User Interface (GUI) which can be used at no cost by researchers, and, finally, the tidyverse, and its adjacent packages, are a collection of packages with concisely defined use-cases, consistent syntax that cover a wide array of data science applications from acquiring data, cleaning data, transforming data, to finally visualizing them, and using them to draw inferences on the underlying real-world data-generation processes.\nThis script is going to introduce you to the following things: we start with the basics, i.e., the RStudio environment, projects, and how to read in data. Thereafter, I will introduce you to the idea behind “tidy data” (Wickham 2014). This describes a particular way of structuring data and is necessary insofar as basically all tidyverse packages require data in this structure to function properly. Then, once the data set is in a tidy format, we can delve into the actual transformation process. Finally, an extensive and thorough introduction to data visualization will be provided.\n\n\nThis stuff is far from being trivial. Just like learning a new language, this requires hard and consistent effort to eventually master coding in R. In order to facilitate your learning, I will link to as many external resources as possible and provide all data sets used in the script so that you can run and adapt (“play with”) the code yourself.\nLet me also tell you that you will run into problems. Constantly. Therefore, googling error messages takes up considerable space in every thorough data analysis endeavor. Usually, you can just copy the error message and throw it into Google. The tricky part here is to strike a balance between staying generalizable enough (i.e., do not include your self-chosen file names or replace them by the data type, i.e., tibble or df – Data.Frame). Platforms to find help and further guidance are for instance StackOverflow and the RStudio forum.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nR Core Team. 2017. R: A Language and Environment for Statistical Computing. Vienna: R Foundation for Statistical Computing. https://www.R-project.org.\n\n\nWickham, Hadley. 2014. “Tidy Data.” Journal of Statistical Software 59 (10). https://doi.org/10.18637/jss.v059.i10.\n\n\nWickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the Tidyverse.” Journal of Open Source Software 4 (43): 1686. https://doi.org/10.21105/joss.01686."
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "See Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97."
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.\n\n\nR Core Team. 2017. R: A Language and Environment for Statistical\nComputing. Vienna: R Foundation for Statistical Computing. https://www.R-project.org."
+  }
+]
