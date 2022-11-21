@@ -6,7 +6,7 @@ In R, the dominant package for visualizing data is `ggplot2` which belongs to th
 
 ## The "layered grammar of graphics"
 
-`ggplot2` works with tibbles and the data needs to be in a tidy format. It builds graphics using "the layered grammar of graphics." [@wickham2010] 
+`ggplot2` works with tibbles and the data needs to be in a tidy format. It builds graphics using "the layered grammar of graphics." [@wickham_layered_2010]
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -32,7 +32,7 @@ ggplot(data = publishers_filtered) +
   geom_bar(aes(x = city)) 
 ```
 
-Unlike the remainder of the tidyverse, `ggplot2` uses a `+` instead of the pipe ` |> `. If you use the pipe by accident, it will not work and an (informative) error message will appear.
+Unlike the remainder of the tidyverse, `ggplot2` uses a `+` instead of the pipe `|>`. If you use the pipe by accident, it will not work and an (informative) error message will appear.
 
 ```{r}
 # ggplot(data = publishers_filtered) |> 
@@ -112,7 +112,7 @@ county_data_midwest <- socviz::county_data |>
   drop_na()
 ```
 
-If both variables are continuous, the easiest option is to use a scatter plot. 
+If both variables are continuous, the easiest option is to use a scatter plot.
 
 ```{r}
 ggplot(data = county_data_midwest) +
@@ -140,7 +140,7 @@ ggplot(data = county_data_midwest) +
   geom_smooth(aes(x = per_dem_2016, y = per_gop_2016, color = state))
 ```
 
-Here, `color = state` has a different effect: each dimension of the categorical variable gets its own line. 
+Here, `color = state` has a different effect: each dimension of the categorical variable gets its own line.
 
 If you do not want it to be smoothed, just use `geom_line()`.
 
@@ -182,7 +182,7 @@ So far, I have only added one layer to the plot. This suffices for the most basi
 
 Scales can be used to take control of how the data's values are mapped to the aesthetic's visual values. You can find a more exhaustive tutorial on them [here](https://www3.nd.edu/~steve/computing_with_data/12_Scales_themes/scales_themes.html).
 
-* `scale_*_continuous` -- for dealing with continuous values. (you can find an exhaustive list of colors in R [here](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf))
+-   `scale_*_continuous` -- for dealing with continuous values. (you can find an exhaustive list of colors in R [here](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf))
 
 ```{r}
 ggplot(data = county_data_midwest) +
@@ -193,9 +193,9 @@ ggplot(data = county_data_midwest) +
                        high = "red")
 ```
 
-* `scale_*_discrete` -- for dealing with discrete values
+-   `scale_*_discrete` -- for dealing with discrete values
 
-* `scale_*_manual` -- manually mapping discrete values to visual values
+-   `scale_*_manual` -- manually mapping discrete values to visual values
 
 ```{r}
 socviz::county_data |> 
@@ -228,7 +228,7 @@ socviz::county_data |>
     ylab("Percentage of votes for the Republicans in 2016") 
 ```
 
-Well, that doesn't look good, the title is too long. Inserting `\n` -- for new line -- will do the  trick.
+Well, that doesn't look good, the title is too long. Inserting `\n` -- for new line -- will do the trick.
 
 ```{r}
 socviz::county_data |> 
@@ -267,7 +267,7 @@ socviz::county_data |>
 
 #### Facets
 
-The original data set consists of four different census regions. If I were to compare them, I could color them accordingly. 
+The original data set consists of four different census regions. If I were to compare them, I could color them accordingly.
 
 ```{r}
 socviz::county_data |> 
@@ -308,7 +308,7 @@ socviz::county_data |>
     facet_grid(winner~winner12)
 ```
 
-If you want to facet using only one variable, put a dot at where the other variable would stand otherwise…
+If you want to facet using only one variable, put a dot at where the other variable would stand otherwise...
 
 ```{r}
 socviz::county_data |> 
@@ -322,13 +322,13 @@ socviz::county_data |>
     facet_grid(.~winner)
 ```
 
-… or just use `facet_wrap()`.
+... or just use `facet_wrap()`.
 
 ## Exporting graphics
 
 If you include the graphics in an RMarkdown document, make sure you use the proper chunk options (i.e., `{r echo=FALSE, message=FALSE, warning=FALSE}`).
 
-If you, however, want to export it and put it into an MS Word document or so, you can just use the `ggsave()` function. By default, it just takes the last plot that has been created and saves it to a path that needs to be specified. If it contains a file extension, `ggsave()` just uses this one. 
+If you, however, want to export it and put it into an MS Word document or so, you can just use the `ggsave()` function. By default, it just takes the last plot that has been created and saves it to a path that needs to be specified. If it contains a file extension, `ggsave()` just uses this one.
 
 ```{r eval=FALSE}
 ggplot(mtcars, aes(mpg, wt)) +
@@ -343,8 +343,9 @@ ggsave("mtcars.pdf", width = 20, height = 20, units = "cm") #change unit using t
 
 ## Further readings
 
-* [ggplot2 -- the book.](https://ggplot2-book.org)
-* The [graphic cookbook for R](http://www.cookbook-r.com/Graphs/).
-* Another [tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
-* The `ggsave()` function [in further detail](https://ggplot2.tidyverse.org/reference/ggsave.html).
-* You can also consult the `introverse` package. `introverse::show_topics("ggplot2")` will give you overviews of the respective package's functions, and `get_help("name of function")` will help you with the respective function.
+-   [ggplot2 -- the book.](https://ggplot2-book.org)
+-   The [graphic cookbook for R](http://www.cookbook-r.com/Graphs/).
+-   Another [tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
+-   A [full-on online course by Kieran Healy](https://socviz.co) (comes with an R package as well).
+-   The `ggsave()` function [in further detail](https://ggplot2.tidyverse.org/reference/ggsave.html).
+-   You can also consult the `introverse` package. `introverse::show_topics("ggplot2")` will give you overviews of the respective package's functions, and `get_help("name of function")` will help you with the respective function.

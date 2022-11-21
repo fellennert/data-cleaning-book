@@ -1,25 +1,24 @@
 # Manipulation with `dplyr` {#wrangling}
 
-The last chapter showed you four things: how you get data sets into R, a couple of ways to create tibbles, how to pass data to functions using the pipe (`|>`), and an introduction to tidy data and how to make data sets tidy using the `tidyr` package [@wickham2020b]. 
-What you haven't learned was how you can actually manipulate the data itself. In the `tidyverse` framework [@wickham2019d], the package which enables you to accomplish those tasks is `dplyr` [@wickham2020].
+The last chapter showed you four things: how you get data sets into R, a couple of ways to create tibbles, how to pass data to functions using the pipe (`|>`), and an introduction to tidy data and how to make data sets tidy using the `tidyr` package [@wickham_tidyr_2020]. What you haven't learned was how you can actually manipulate the data itself. In the `tidyverse` framework [@wickham_welcome_2019], the package which enables you to accomplish those tasks is `dplyr` [@wickham_dplyr_2020].
 
-`dplyr` joined the party in 2014, building upon the `plyr` package. The d in `dplyr` stands for data set and `dplyr` works with tibbles (or data frames) only. 
+`dplyr` joined the party in 2014, building upon the `plyr` package. The d in `dplyr` stands for data set and `dplyr` works with tibbles (or data frames) only.
 
 It consists of five main functions, the "verbs":
 
-* `arrange()` -- sort values
-* `filter()` -- pick observations
-* `mutate()` -- create new variables (columns) 
-* `select()` -- select variables
-* `summarize()` -- create summaries from multiple values
+-   `arrange()` -- sort values
+-   `filter()` -- pick observations
+-   `mutate()` -- create new variables (columns)
+-   `select()` -- select variables
+-   `summarize()` -- create summaries from multiple values
 
-They are joined by `group_by()`, a function that changes the scope on which entities the functions are applied to. 
+They are joined by `group_by()`, a function that changes the scope on which entities the functions are applied to.
 
 Furthermore, diverse `bind_` functions and `_join`s enable you to combine multiple tibbles into one. They will be introduced later.
 
 ## Working with the main "verbs"
 
-In the following, I will guide you through how you can use the verbs to accomplish whatever goals which require data wrangling you might have. 
+In the following, I will guide you through how you can use the verbs to accomplish whatever goals which require data wrangling you might have.
 
 The data set I will use here consists of the 1,000 most popular movies on IMDb which were published between 2006 and 2016 and some data on them. It was created by PromptCloud and DataStock and published on Kaggle, more information can be found [here](https://www.kaggle.com/PromptCloudHQ/imdb-data).
 
@@ -41,7 +40,7 @@ The data set hasn't been modified by me before. I will show you how I would go a
 glimpse(imdb_raw)
 ```
 
-The columns I want to keep are: `Title`, `Director`, `Year`, `Runtime (Minutes)`, `Rating`, `Votes`, and `Revenue (Millions)`. Furthermore, I want to rename the columns: every column's name should be in lowercase and a regular name that does not need to be surrounded by back ticks -- i.e., a name that only consists of characters, numbers, underscores, or dots. 
+The columns I want to keep are: `Title`, `Director`, `Year`, `Runtime (Minutes)`, `Rating`, `Votes`, and `Revenue (Millions)`. Furthermore, I want to rename the columns: every column's name should be in lowercase and a regular name that does not need to be surrounded by back ticks -- i.e., a name that only consists of characters, numbers, underscores, or dots.
 
 This can be achieved in a couple of ways:
 
@@ -98,9 +97,9 @@ A couple of further shortcuts for `select()` do exist. An overview can be found 
 
 ### `filter()`
 
-Whereas `select()` enables you to choose variables (i.e., columns), `filter()` lets you choose observations (i.e., rows).  
+Whereas `select()` enables you to choose variables (i.e., columns), `filter()` lets you choose observations (i.e., rows).
 
-In this case, I only want movies with a revenue above $100,000,000:
+In this case, I only want movies with a revenue above \$100,000,000:
 
 ```{r}
 imdb_selected |> 
@@ -108,7 +107,7 @@ imdb_selected |>
   glimpse()
 ```
 
-Besides, I am especially interested in the director Christopher Nolan. Therefore, I want to look at movies that were directed by him and made more than $100,000,000:
+Besides, I am especially interested in the director Christopher Nolan. Therefore, I want to look at movies that were directed by him and made more than \$100,000,000:
 
 ```{r}
 imdb_selected |> 
@@ -227,7 +226,7 @@ imdb_selected |>
   glimpse()
 ```
 
-The structure of the `mutate()` call looks like this: first, you need to provide the name of the new variable. If the variable exists already, it will be replaced. Second, the equal sign tells R what the new variable should contain. Third, a function that outputs a vector which is as long as the tibble has rows or 1. 
+The structure of the `mutate()` call looks like this: first, you need to provide the name of the new variable. If the variable exists already, it will be replaced. Second, the equal sign tells R what the new variable should contain. Third, a function that outputs a vector which is as long as the tibble has rows or 1.
 
 If we want to drop all other columns and just keep the new one: `transmute()` drops all the original columns.
 
@@ -239,11 +238,11 @@ imdb_selected |>
 
 `mutate()` uses so-called *window functions*. They take one vector of values and return another vector of values. An overview -- again, from the cheat sheet:
 
-![Window functions](figures/window functions.png)
+![Window functions](figures/window%20functions.png)
 
 Another feature of `dplyr`, which is useful in combination with `mutate()`, is `case_when()`.
 
-`case_when()` can for instance be used to create binary indicator variables. In this example I want it to be 0 if the movie was made before 2010 and 1 if not. 
+`case_when()` can for instance be used to create binary indicator variables. In this example I want it to be 0 if the movie was made before 2010 and 1 if not.
 
 ```{r}
 imdb_selected |> 
@@ -259,7 +258,7 @@ Keep in mind that you can throw any function into `mutate()` as long as it is ve
 
 When you analyze data, you often want to compare entities according to some sort of summary statistic. This means that you, first, need to split up your data set into certain groups which share one or more characteristics, and, second, collapse the columns together into single-row summaries. The former challenge is accomplished using `group_by()` whose argument is one or more variables, the latter requires the `summarize()` function. This function works similar to `mutate()` but uses *summary functions* -- which take a vector of multiple values and return a single value -- instead of window functions -- which return a vector of the same length as the input.
 
-Let me provide you an example. 
+Let me provide you an example.
 
 I am interested in the director's average ratings:
 
@@ -269,11 +268,11 @@ imdb_selected |>
   summarize(avg_rating = mean(rating))
 ```
 
-In general, `summarize()` always works like this: first, you change the scope from the entire tibble to different groups. Then, you calculate your summary. If you then want to further manipulate your date or calculate something else based on the new summary, you need to call `ungroup()`. 
+In general, `summarize()` always works like this: first, you change the scope from the entire tibble to different groups. Then, you calculate your summary. If you then want to further manipulate your date or calculate something else based on the new summary, you need to call `ungroup()`.
 
 You can see the summary functions below:
 
-![Summary functions in R](figures/summary functions.png)
+![Summary functions in R](figures/summary%20functions.png)
 
 Another handy function akin to this is `count()`. It counts all occurrences of a singular value in the tibble.
 
@@ -284,7 +283,7 @@ imdb_selected |>
   count(director)
 ```
 
-Beyond that, you can also use `group_by()` with mutate. If you do so, the rows will not be collapsed together as in `summarize()`. 
+Beyond that, you can also use `group_by()` with mutate. If you do so, the rows will not be collapsed together as in `summarize()`.
 
 ### `arrange()`
 
@@ -310,12 +309,12 @@ Chapeau, Nitesh Tiwari!
 
 ## Introducing `joins`
 
-The last session showed you three things: how you get data sets into R, a couple of ways to create tibbles, and an introduction to tidy data and how to make data sets tidy using the `tidyr` package. As you may recall from the last session, it was not able to solve the last two problems with only the tools `tidyr` offers. In particular, the problems were:    
+The last session showed you three things: how you get data sets into R, a couple of ways to create tibbles, and an introduction to tidy data and how to make data sets tidy using the `tidyr` package. As you may recall from the last session, it was not able to solve the last two problems with only the tools `tidyr` offers. In particular, the problems were:
 
-* Multiple types of observational units are stored in the same table.
-* A single observational unit is stored in multiple tables.  
+-   Multiple types of observational units are stored in the same table.
+-   A single observational unit is stored in multiple tables.
 
-Both problems need some different kind of tools: joins. Joins can be used to merge tibbles together. This tutorial, again, builds heavy on the R for Data Science book [@wickham2016a]
+Both problems need some different kind of tools: joins. Joins can be used to merge tibbles together. This tutorial, again, builds heavily on the R for Data Science book [@wickham_r_2016-1]
 
 ### Multiple types of units are in the same table
 
@@ -330,7 +329,7 @@ billboard <- read_csv("https://www.dropbox.com/s/e5gbrpa1fsrtvj5/billboard.csv?d
 glimpse(billboard)
 ```
 
-Here, you can immediately see the problem: it contains two types of observations: songs and ranks. Hence, the data set needs to be split up. However, there should be a pointer from the rank data set to the song data set. First, I add an ID column to `song_tbl`. Then, I can add it to `rank_tbl` and drop the unnecessary columns which contain the name of the artist and the track. 
+Here, you can immediately see the problem: it contains two types of observations: songs and ranks. Hence, the data set needs to be split up. However, there should be a pointer from the rank data set to the song data set. First, I add an ID column to `song_tbl`. Then, I can add it to `rank_tbl` and drop the unnecessary columns which contain the name of the artist and the track.
 
 ```{r}
 song_tbl <- billboard |> 
@@ -357,7 +356,9 @@ glimpse(rank_tbl)
 
 ### One unit is in multiple tables
 
-For this example, I have split up a data set from the `socviz` package containing data on the 2016 elections in the U.S. according to census region and stored them in a folder. I can scrape the file names in the folder and read it into a list in an automated manner. (Note that the funtions used to read the files in in an automated fashion are beyond the scope of this course. They come from the [`fs`](https://github.com/r-lib/fs) and the [`purrr`](https://r4ds.had.co.nz/iteration.html) package.)^[If you want the code on your machine, download the files behind the following links and store them in a folder called `socviz_us` which is again stored in a folder named `data` which lives in the same folder as the .qmd file. https://www.dropbox.com/s/14k6bkmaq6l47p2/midwest.csv?dl=0 ; https://www.dropbox.com/s/t3057jf9evt6vjz/northeast.csv?dl=0 ; https://www.dropbox.com/s/lbdde4udlrfea46/south.csv?dl=0 ; https://www.dropbox.com/s/vcvl90dbegagv4z/west.csv?dl=0]
+For this example, I have split up a data set from the `socviz` package containing data on the 2016 elections in the U.S. according to census region and stored them in a folder. I can scrape the file names in the folder and read it into a list in an automated manner. (Note that the functions used to read the files in in an automated fashion are beyond the scope of this course. They come from the [`fs`](https://github.com/r-lib/fs) [@hester_fs_2021] and the [`purrr`](https://r4ds.had.co.nz/iteration.html) package [@henry_purrr_2020].)[^dplyr-1]
+
+[^dplyr-1]: If you want the code on your machine, download the files behind the following links and store them in a folder called `socviz_us` which is again stored in a folder named `data` which lives in the same folder as the .qmd file. https://www.dropbox.com/s/14k6bkmaq6l47p2/midwest.csv?dl=0 ; https://www.dropbox.com/s/t3057jf9evt6vjz/northeast.csv?dl=0 ; https://www.dropbox.com/s/lbdde4udlrfea46/south.csv?dl=0 ; https://www.dropbox.com/s/vcvl90dbegagv4z/west.csv?dl=0
 
 ```{r}
 library(fs)
@@ -406,13 +407,13 @@ election_data <- file_list |> bind_rows()
 glimpse(election_data)
 ```
 
-Now, the data set is ready for cleaning and tidying. Feel free to do this is as a take-home exercise. 
+Now, the data set is ready for cleaning and tidying. Feel free to do this is as a take-home exercise.
 
 However, the topic of this script is different joins. The `dplyr` package offers six different joins: `left_join()`, `right_join()`, `inner_join()`, `full_join()`, `semi_join()`, and `anti_join()`. The former four are mutating joins, they add columns. The latter two can be used to filter rows in a data set. Below is an overview from the `dplyr` cheat sheet:
 
-![Overview of the different joins](figures/joins.png) 
+![Overview of the different joins](figures/joins.png)
 
-In the following, I will illustrate this using the election data. I split up the data set into three: data on the elections 2016 and 2012, and demographic data. The column they have in common is the county's respective name. 
+In the following, I will illustrate this using the election data. I split up the data set into three: data on the elections 2016 and 2012, and demographic data. The column they have in common is the county's respective name.
 
 ```{r}
 election_data16 <- election_data |> 
@@ -441,7 +442,7 @@ election_data16 |>
   right_join(demographic_data, by = c("county" = "name"))
 ```
 
-Here, the problem is that the same counties exist in different states. Therefore, all combinations are returned. Hence, I need to specify two arguments: the county's name and state. 
+Here, the problem is that the same counties exist in different states. Therefore, all combinations are returned. Hence, I need to specify two arguments: the county's name and state.
 
 ```{r}
 election_data16 |> 
@@ -458,7 +459,7 @@ election_data16 |>
   inner_join(demographic_data)
 ```
 
-An `inner_join()` returns all rows which are in `x` and `y`. 
+An `inner_join()` returns all rows which are in `x` and `y`.
 
 ### `full_join()`
 
@@ -491,8 +492,7 @@ election_data16 |>
 
 ### `bind_rows()` and `bind_cols()`
 
-Binding tibbles together is made easy using the `bind_*()` functions. `bind_rows()` binds them together by rows, `bind_cols()` by columns. 
-For the former, it is important that column names are matching. Otherwise, the non-matching ones will be added as separate columns and NAs introduced. IDs can be added by using the `.id = ` argument, where the name of the id column can be specified.
+Binding tibbles together is made easy using the `bind_*()` functions. `bind_rows()` binds them together by rows, `bind_cols()` by columns. For the former, it is important that column names are matching. Otherwise, the non-matching ones will be added as separate columns and NAs introduced. IDs can be added by using the `.id =` argument, where the name of the id column can be specified.
 
 ```{r}
 election_data16 |> 
@@ -510,10 +510,10 @@ election_data12 |> bind_cols(election_data16)
 
 ## Further links
 
-* [Chapter in R4DS](https://r4ds.had.co.nz/transform.html)
-* More on window functions in the vignette: `vignette("window-functions")`
-* Again, [the cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
-* A [tutorial on YouTube](https://www.youtube.com/watch?v=jWjqLW-u3hc)
-* Another introduction can be found [here](https://stat545.com/join-cheatsheet.html).
-* The [chapter in R4DS](https://r4ds.had.co.nz/relational-data.html) has some nice diagrams.
-* You can also consult the `introverse` package if you need help with the packages covered here -- `introverse::show_topics("dplyr")` will give you an overview of `dplyr`'s functions, and `get_help("name of function")` will help you with the respective function.
+-   [Chapter in R4DS](https://r4ds.had.co.nz/transform.html)
+-   More on window functions in the vignette: `vignette("window-functions")`
+-   Again, [the cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+-   A [tutorial on YouTube](https://www.youtube.com/watch?v=jWjqLW-u3hc)
+-   Another introduction can be found [here](https://stat545.com/join-cheatsheet.html).
+-   The [chapter in R4DS](https://r4ds.had.co.nz/relational-data.html) has some nice diagrams.
+-   You can also consult the `introverse` package if you need help with the packages covered here -- `introverse::show_topics("dplyr")` will give you an overview of `dplyr`'s functions, and `get_help("name of function")` will help you with the respective function.

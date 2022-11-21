@@ -4,13 +4,15 @@ project:
 book:
   title: "Data cleaning for social scientists"
   author: "Felix Lennert"
-  date: "last update: `r lubridate::today()`"
+  date: "2022-11-21"
   chapters:
     - index.qmd
-    - projects_readr.qmd
+    - projects.qmd
+    - readr.qmd
     - tidy-data.qmd
     - dplyr.qmd
-    - forcats_lubridate.qmd
+    - forcats.qmd
+    - lubridate.qmd
     - ggplot2.qmd
     - references.qmd
 

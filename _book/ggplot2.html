@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data cleaning for social scientists - 5&nbsp; Visualizations with ggplot2</title>
+<title>Data cleaning for social scientists - 7&nbsp; Visualizations with ggplot2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -94,7 +113,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./references.html" rel="next">
-<link href="./forcats_lubridate.html" rel="prev">
+<link href="./lubridate.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -133,7 +152,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -163,27 +182,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./projects_readr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></a>
+  <a href="./projects.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">RStudio Projects</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tidy-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></a>
+  <a href="./readr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Reading in data with <code>readr</code> (et al.)</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dplyr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></a>
+  <a href="./tidy-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Tidy data with <code>tidyr</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./forcats_lubridate.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></a>
+  <a href="./dplyr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></a>
+  <a href="./forcats.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./lubridate.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Dates with <code>lubridate</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -200,13 +229,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-layered-grammar-of-graphics" id="toc-the-layered-grammar-of-graphics" class="nav-link active" data-scroll-target="#the-layered-grammar-of-graphics"><span class="toc-section-number">5.1</span>  The “layered grammar of graphics”</a>
+  <li><a href="#the-layered-grammar-of-graphics" id="toc-the-layered-grammar-of-graphics" class="nav-link active" data-scroll-target="#the-layered-grammar-of-graphics"><span class="toc-section-number">7.1</span>  The “layered grammar of graphics”</a>
   <ul class="collapse">
-  <li><a href="#the-layers" id="toc-the-layers" class="nav-link" data-scroll-target="#the-layers"><span class="toc-section-number">5.1.1</span>  The layers</a></li>
-  <li><a href="#making-them-publishable" id="toc-making-them-publishable" class="nav-link" data-scroll-target="#making-them-publishable"><span class="toc-section-number">5.1.2</span>  Making them “publishable”</a></li>
+  <li><a href="#the-layers" id="toc-the-layers" class="nav-link" data-scroll-target="#the-layers"><span class="toc-section-number">7.1.1</span>  The layers</a></li>
+  <li><a href="#making-them-publishable" id="toc-making-them-publishable" class="nav-link" data-scroll-target="#making-them-publishable"><span class="toc-section-number">7.1.2</span>  Making them “publishable”</a></li>
   </ul></li>
-  <li><a href="#exporting-graphics" id="toc-exporting-graphics" class="nav-link" data-scroll-target="#exporting-graphics"><span class="toc-section-number">5.2</span>  Exporting graphics</a></li>
-  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings"><span class="toc-section-number">5.3</span>  Further readings</a></li>
+  <li><a href="#exporting-graphics" id="toc-exporting-graphics" class="nav-link" data-scroll-target="#exporting-graphics"><span class="toc-section-number">7.2</span>  Exporting graphics</a></li>
+  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings"><span class="toc-section-number">7.3</span>  Further readings</a></li>
   </ul>
 </nav>
     </div>
@@ -215,7 +244,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="visualization" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></span></h1>
+<h1 class="title"><span id="visualization" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></span></h1>
 </div>
 
 
@@ -233,9 +262,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>“The purpose of visualization is insight, not pictures.” – Ben A. Shneiderman</p>
 </blockquote>
 <p>In R, the dominant package for visualizing data is <code>ggplot2</code> which belongs to the tidyverse.</p>
-<section id="the-layered-grammar-of-graphics" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="the-layered-grammar-of-graphics"><span class="header-section-number">5.1</span> The “layered grammar of graphics”</h2>
-<p><code>ggplot2</code> works with tibbles and the data needs to be in a tidy format. It builds graphics using “the layered grammar of graphics.” <span class="citation" data-cites="wickham2010">(<a href="references.html#ref-wickham2010" role="doc-biblioref"><strong>wickham2010?</strong></a>)</span></p>
+<section id="the-layered-grammar-of-graphics" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="the-layered-grammar-of-graphics"><span class="header-section-number">7.1</span> The “layered grammar of graphics”</h2>
+<p><code>ggplot2</code> works with tibbles and the data needs to be in a tidy format. It builds graphics using “the layered grammar of graphics.” <span class="citation" data-cites="wickham_layered_2010">(<a href="references.html#ref-wickham_layered_2010" role="doc-biblioref">Wickham 2010</a>)</span></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -266,19 +295,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot(data = publishers_filtered) |&gt; </span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   geom_bar(aes(x = city)) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="the-layers" class="level3" data-number="5.1.1">
-<h3 data-number="5.1.1" class="anchored" data-anchor-id="the-layers"><span class="header-section-number">5.1.1</span> The layers</h3>
+<section id="the-layers" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="the-layers"><span class="header-section-number">7.1.1</span> The layers</h3>
 <p>In general, a call looks like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="sc">&lt;</span>DATA<span class="sc">&gt;</span>) <span class="sc">+</span> </span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="er">&lt;</span>GEOM_FUNCTION<span class="sc">&gt;</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="sc">&lt;</span>MAPPINGS<span class="sc">&gt;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As you might have seen above, I provided the data in the initial <code>ggplot</code> call. Then, when I added the layer – the <code>geom_bar()</code> for a bar plot – I had to provide the mapping – which variables I wanted to plot – using <code>aes()</code>. This is referred to as the <code>aesthetics</code>. In my case, I wanted the cities to be projected to the x-axis. Since I was using <code>geom_bar</code> to create a bar plot, the number of occurrences of the respective cities were automatically counted and depicted on the y-axis. There are more <code>geom_*</code> functions and they all create different plots. Whether you can use them or not depends on the data you have at hand and/or the number of variables you want to plot. In the following, I will give you a brief overview of the most important geoms.</p>
-<section id="one-variable" class="level4" data-number="5.1.1.1">
-<h4 data-number="5.1.1.1" class="anchored" data-anchor-id="one-variable"><span class="header-section-number">5.1.1.1</span> One variable</h4>
+<section id="one-variable" class="level4" data-number="7.1.1.1">
+<h4 data-number="7.1.1.1" class="anchored" data-anchor-id="one-variable"><span class="header-section-number">7.1.1.1</span> One variable</h4>
 <p>If you only want to display one variable, the x- or y-axis, as you choose, will depict the variable’s value. The counterpart will display the frequency or density of those values.</p>
-<section id="one-variable-discrete" class="level5" data-number="5.1.1.1.1">
-<h5 data-number="5.1.1.1.1" class="anchored" data-anchor-id="one-variable-discrete"><span class="header-section-number">5.1.1.1.1</span> One variable – discrete</h5>
+<section id="one-variable-discrete" class="level5" data-number="7.1.1.1.1">
+<h5 data-number="7.1.1.1.1" class="anchored" data-anchor-id="one-variable-discrete"><span class="header-section-number">7.1.1.1.1</span> One variable – discrete</h5>
 <p>Here, the only possible kind of visualization is a bar plot as shown above. If the visualization should look more fancy, e.g., with colored bars, you have several arguments at hand. If they should not be different for different kinds of data, they need to be specified outside the <code>aes()</code>. There are always different arguments and you can look them up using <code>?&lt;GEOM_FUNCTION&gt;</code> and then looking at the Aesthetics section. Apart from that, you can also look at the <a href="https://rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf"><code>ggplot2</code> cheatsheet</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> publishers_filtered) <span class="sc">+</span></span>
@@ -288,8 +317,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
-<section id="one-variable-continuous" class="level5" data-number="5.1.1.1.2">
-<h5 data-number="5.1.1.1.2" class="anchored" data-anchor-id="one-variable-continuous"><span class="header-section-number">5.1.1.1.2</span> One variable – continuous</h5>
+<section id="one-variable-continuous" class="level5" data-number="7.1.1.1.2">
+<h5 data-number="7.1.1.1.2" class="anchored" data-anchor-id="one-variable-continuous"><span class="header-section-number">7.1.1.1.2</span> One variable – continuous</h5>
 <p>If you want to display a continuous variable’s distribution of values, you can use a histogram. Its <code>geom_*</code> function is <code>geom_histogram()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>billboard <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://www.dropbox.com/s/e5gbrpa1fsrtvj5/billboard.csv?dl=1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -341,11 +370,11 @@ date  (1): date.entered
 </div>
 </section>
 </section>
-<section id="two-variables" class="level4" data-number="5.1.1.2">
-<h4 data-number="5.1.1.2" class="anchored" data-anchor-id="two-variables"><span class="header-section-number">5.1.1.2</span> Two variables</h4>
+<section id="two-variables" class="level4" data-number="7.1.1.2">
+<h4 data-number="7.1.1.2" class="anchored" data-anchor-id="two-variables"><span class="header-section-number">7.1.1.2</span> Two variables</h4>
 <p>In the majority of cases, you will want to display the relationship between two variables, one on the x- and the other one on the y-axis.</p>
-<section id="both-continuous" class="level5" data-number="5.1.1.2.1">
-<h5 data-number="5.1.1.2.1" class="anchored" data-anchor-id="both-continuous"><span class="header-section-number">5.1.1.2.1</span> Both continuous</h5>
+<section id="both-continuous" class="level5" data-number="7.1.1.2.1">
+<h5 data-number="7.1.1.2.1" class="anchored" data-anchor-id="both-continuous"><span class="header-section-number">7.1.1.2.1</span> Both continuous</h5>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>county_data_midwest <span class="ot">&lt;-</span> socviz<span class="sc">::</span>county_data <span class="sc">|&gt;</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(census_region <span class="sc">==</span> <span class="st">"Midwest"</span>) <span class="sc">|&gt;</span> </span>
@@ -396,8 +425,8 @@ date  (1): date.entered
 </div>
 </div>
 </section>
-<section id="discrete-x-continuous-y" class="level5" data-number="5.1.1.2.2">
-<h5 data-number="5.1.1.2.2" class="anchored" data-anchor-id="discrete-x-continuous-y"><span class="header-section-number">5.1.1.2.2</span> Discrete X, continuous Y</h5>
+<section id="discrete-x-continuous-y" class="level5" data-number="7.1.1.2.2">
+<h5 data-number="7.1.1.2.2" class="anchored" data-anchor-id="discrete-x-continuous-y"><span class="header-section-number">7.1.1.2.2</span> Discrete X, continuous Y</h5>
 <p>In this case, different categories of data will be put on the x-axis and some of their properties will be displayed on the y-axis. The probably most prominent example for this type of plot is a box plot:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
@@ -407,8 +436,8 @@ date  (1): date.entered
 </div>
 </div>
 </section>
-<section id="both-discrete" class="level5" data-number="5.1.1.2.3">
-<h5 data-number="5.1.1.2.3" class="anchored" data-anchor-id="both-discrete"><span class="header-section-number">5.1.1.2.3</span> Both discrete</h5>
+<section id="both-discrete" class="level5" data-number="7.1.1.2.3">
+<h5 data-number="7.1.1.2.3" class="anchored" data-anchor-id="both-discrete"><span class="header-section-number">7.1.1.2.3</span> Both discrete</h5>
 <p>It is rarely the case that you want to depict two categorical variables in one plot. If so, you can use <code>geom_jitter()</code>. It is related to <code>geom_point()</code>. The difference is that with <code>geom_jitter()</code>, a little bit of noise is added to the dots, making them appear distinct.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
@@ -428,11 +457,11 @@ date  (1): date.entered
 </section>
 </section>
 </section>
-<section id="making-them-publishable" class="level3" data-number="5.1.2">
-<h3 data-number="5.1.2" class="anchored" data-anchor-id="making-them-publishable"><span class="header-section-number">5.1.2</span> Making them “publishable”</h3>
+<section id="making-them-publishable" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="making-them-publishable"><span class="header-section-number">7.1.2</span> Making them “publishable”</h3>
 <p>So far, I have only added one layer to the plot. This suffices for the most basic visualizations. The good thing about R and RMarkdown is, however, that you can write entire publications only using their means. Hence, the plots need to look awesome. This section is dedicated to how you can achieve this. First, I will touch upon how you can make them look good using <code>scales</code>. <code>labs()</code> allow you to add titles, captions, and axis labels. Finally, <code>facet_*</code> allows you to plot multiple plots into one.</p>
-<section id="scales" class="level4" data-number="5.1.2.1">
-<h4 data-number="5.1.2.1" class="anchored" data-anchor-id="scales"><span class="header-section-number">5.1.2.1</span> Scales</h4>
+<section id="scales" class="level4" data-number="7.1.2.1">
+<h4 data-number="7.1.2.1" class="anchored" data-anchor-id="scales"><span class="header-section-number">7.1.2.1</span> Scales</h4>
 <p>Scales can be used to take control of how the data’s values are mapped to the aesthetic’s visual values. You can find a more exhaustive tutorial on them <a href="https://www3.nd.edu/~steve/computing_with_data/12_Scales_themes/scales_themes.html">here</a>.</p>
 <ul>
 <li><code>scale_*_continuous</code> – for dealing with continuous values. (you can find an exhaustive list of colors in R <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">here</a>)</li>
@@ -469,8 +498,8 @@ date  (1): date.entered
 </div>
 </div>
 </section>
-<section id="adding-titles-captions-etc." class="level4" data-number="5.1.2.2">
-<h4 data-number="5.1.2.2" class="anchored" data-anchor-id="adding-titles-captions-etc."><span class="header-section-number">5.1.2.2</span> Adding titles, captions, etc.</h4>
+<section id="adding-titles-captions-etc." class="level4" data-number="7.1.2.2">
+<h4 data-number="7.1.2.2" class="anchored" data-anchor-id="adding-titles-captions-etc."><span class="header-section-number">7.1.2.2</span> Adding titles, captions, etc.</h4>
 <p>Now you have modified the scales and colors – there is a lot more to be modified if you want to – but you have not added a meaningful title, a nice caption (where were the data obtained?), and the axes do not have proper names, too. This can be achieved using <code>labs()</code> (which is the abbreviation for labels).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">|&gt;</span> </span>
@@ -539,8 +568,8 @@ date  (1): date.entered
 </div>
 </div>
 </section>
-<section id="facets" class="level4" data-number="5.1.2.3">
-<h4 data-number="5.1.2.3" class="anchored" data-anchor-id="facets"><span class="header-section-number">5.1.2.3</span> Facets</h4>
+<section id="facets" class="level4" data-number="7.1.2.3">
+<h4 data-number="7.1.2.3" class="anchored" data-anchor-id="facets"><span class="header-section-number">7.1.2.3</span> Facets</h4>
 <p>The original data set consists of four different census regions. If I were to compare them, I could color them accordingly.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">|&gt;</span> </span>
@@ -604,8 +633,8 @@ date  (1): date.entered
 </section>
 </section>
 </section>
-<section id="exporting-graphics" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="exporting-graphics"><span class="header-section-number">5.2</span> Exporting graphics</h2>
+<section id="exporting-graphics" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="exporting-graphics"><span class="header-section-number">7.2</span> Exporting graphics</h2>
 <p>If you include the graphics in an RMarkdown document, make sure you use the proper chunk options (i.e., <code>{r echo=FALSE, message=FALSE, warning=FALSE}</code>).</p>
 <p>If you, however, want to export it and put it into an MS Word document or so, you can just use the <code>ggsave()</code> function. By default, it just takes the last plot that has been created and saves it to a path that needs to be specified. If it contains a file extension, <code>ggsave()</code> just uses this one.</p>
 <div class="cell">
@@ -619,17 +648,23 @@ date  (1): date.entered
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"mtcars.pdf"</span>, <span class="at">width =</span> <span class="dv">20</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">units =</span> <span class="st">"cm"</span>) <span class="co">#change unit using the units argument</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="further-readings" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="further-readings"><span class="header-section-number">5.3</span> Further readings</h2>
+<section id="further-readings" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="further-readings"><span class="header-section-number">7.3</span> Further readings</h2>
 <ul>
 <li><a href="https://ggplot2-book.org">ggplot2 – the book.</a></li>
 <li>The <a href="http://www.cookbook-r.com/Graphs/">graphic cookbook for R</a>.</li>
 <li>Another <a href="http://r-statistics.co/ggplot2-Tutorial-With-R.html">tutorial</a>.</li>
+<li>A <a href="https://socviz.co">full-on online course by Kieran Healy</a> (comes with an R package as well).</li>
 <li>The <code>ggsave()</code> function <a href="https://ggplot2.tidyverse.org/reference/ggsave.html">in further detail</a>.</li>
 <li>You can also consult the <code>introverse</code> package. <code>introverse::show_topics("ggplot2")</code> will give you overviews of the respective package’s functions, and <code>get_help("name of function")</code> will help you with the respective function.</li>
 </ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-wickham_layered_2010" class="csl-entry" role="doc-biblioentry">
+Wickham, Hadley. 2010. <span>“A <span>Layered Grammar</span> of <span>Graphics</span>.”</span> <em>Journal of Computational and Graphical Statistics</em> 19 (1): 3–28. <a href="https://doi.org/10.1198/jcgs.2009.07098">https://doi.org/10.1198/jcgs.2009.07098</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -733,8 +768,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./forcats_lubridate.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></span>
+      <a href="./lubridate.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Dates with <code>lubridate</code></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
