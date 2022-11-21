@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -54,7 +59,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -67,7 +72,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -108,7 +113,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./intro.html" rel="next">
+<link href="./projects_readr.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -177,12 +182,27 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio, Projects, and tidy data</span></a>
+  <a href="./projects_readr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./tidy-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forcats_lubridate.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -195,7 +215,7 @@ div.csl-indent {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -240,20 +260,19 @@ div.csl-indent {
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
 <p>This is the script for a two-day workshop on data cleaning for the social sciences. I assume you to be familiar with basic R concepts such as the different data types and how to index them, the general structure of the syntax, and how to make function calls.</p>
+<p>In the following box, you can see the introductory slides for a workshop I gave at the Céntre Emile Durkheim at Bordeaux:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_url</span>(<span class="st">"file:///Users/felixlennert/Documents/phd/teaching/data-prep_2days/welcome.html#/title-slide"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<iframe src="file:///Users/felixlennert/Documents/phd/teaching/data-prep_2days/welcome.html#/title-slide" width="672" height="400px" data-external="1">
+</iframe>
+</div>
 <p>In the 21st century, social scientists are able to tap into wells of data that are deeper than ever before. Not only can we use more designed data, i.e., data that have been generated with the clear goal of performing research using them, such as survey data, than ever. Also the rise of the internet as a sensor for human behavior provides us with new opportunities.</p>
-<p>Given their variety, these data sets may all come in different structures, and if we want to leverage them to improve our understanding of the world, we need to reshape them properly. Therefore, we are in need for tools that are capable and flexible enough to work with all different kinds of data while remaining easily accessible. In my opinion, R <span class="citation" data-cites="rcoreteam2017">(<a href="references.html#ref-rcoreteam2017" role="doc-biblioref">R Core Team 2017</a>)</span>, RStudio, and the tidyverse packages <span class="citation" data-cites="wickham2019">(<a href="references.html#ref-wickham2019" role="doc-biblioref">Wickham et al. 2019</a>)</span> strike a good balance here. R provides a powerful, flexible, statistical programming language, RStudio serves as a convenient Graphic User Interface (GUI) which can be used at no cost by researchers, and, finally, the tidyverse, and its adjacent packages, are a collection of packages with concisely defined use-cases, consistent syntax that cover a wide array of data science applications from acquiring data, cleaning data, transforming data, to finally visualizing them, and using them to draw inferences on the underlying real-world data-generation processes.</p>
+<p>Given their variety, these data sets may all come in different structures, and if we want to leverage them to improve our understanding of the world, we need to reshape them properly. Therefore, we are in need for tools that are capable and flexible enough to work with all different kinds of data while remaining easily accessible. In my opinion, R <span class="citation" data-cites="rcoreteam2017">(<a href="references.html#ref-rcoreteam2017" role="doc-biblioref">R Core Team 2017</a>)</span>, RStudio, and the tidyverse packages <span class="citation" data-cites="wickham2019">(<a href="references.html#ref-wickham2019" role="doc-biblioref">Wickham et al. 2019</a>)</span> strike a good balance here. R is a powerful, flexible, statistical programming language, RStudio serves as a convenient Graphic User Interface (GUI) which can be used freely by researchers, and, finally, the tidyverse, and its adjacent packages, are a collection of packages with concisely defined use-cases, consistent syntax that cover a wide array of data science applications from acquiring data, cleaning data, transforming data, to finally visualizing them, and using them to draw inferences on the underlying real-world data-generation processes.</p>
 <p>This script is going to introduce you to the following things: we start with the basics, i.e., the RStudio environment, projects, and how to read in data. Thereafter, I will introduce you to the idea behind “tidy data” <span class="citation" data-cites="wickham2014">(<a href="references.html#ref-wickham2014" role="doc-biblioref">Wickham 2014</a>)</span>. This describes a particular way of structuring data and is necessary insofar as basically all tidyverse packages require data in this structure to function properly. Then, once the data set is in a tidy format, we can delve into the actual transformation process. Finally, an extensive and thorough introduction to data visualization will be provided.</p>
 <section id="some-final-introductory-remarks" class="level3">
 <h3 class="anchored" data-anchor-id="some-final-introductory-remarks">Some final introductory remarks</h3>
-<p>This stuff is far from being trivial. Just like learning a new language, this requires hard and consistent effort to eventually master coding in R. In order to facilitate your learning, I will link to as many external resources as possible and provide all data sets used in the script so that you can run and adapt (“play with”) the code yourself.</p>
+<p>This stuff is far from trivial. Just like learning a new language, mastering it requires hard and consistent effort to eventually master coding in R. In order to facilitate your learning, I will link to as many external resources as possible and provide all data sets used in the script so that you can run and adapt (“play with”) the code yourself.</p>
 <p>Let me also tell you that you will run into problems. Constantly. Therefore, googling error messages takes up considerable space in every thorough data analysis endeavor. Usually, you can just copy the error message and throw it into Google. The tricky part here is to strike a balance between staying generalizable enough (i.e., do not include your self-chosen file names or replace them by the data type, i.e., tibble or df – Data.Frame). Platforms to find help and further guidance are for instance StackOverflow and the RStudio forum.</p>
-<p>To learn more about Quarto books visit <a href="https://quarto.org/docs/books" class="uri">https://quarto.org/docs/books</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
@@ -340,7 +359,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
@@ -372,8 +392,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./intro.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio, Projects, and tidy data</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./projects_readr.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

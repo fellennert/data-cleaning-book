@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data cleaning for social scientists - 1&nbsp; Introduction to RStudio Projects and readr</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tidy-data.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data cleaning for social scientists</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./projects_readr.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tidy-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forcats_lubridate.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#rstudio-projects" id="toc-rstudio-projects" class="nav-link active" data-scroll-target="#rstudio-projects"><span class="toc-section-number">1.1</span>  RStudio Projects</a>
+  <ul class="collapse">
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation"><span class="toc-section-number">1.1.1</span>  Motivation</a></li>
+  <li><a href="#how-to-create-an-rstudio-project" id="toc-how-to-create-an-rstudio-project" class="nav-link" data-scroll-target="#how-to-create-an-rstudio-project"><span class="toc-section-number">1.1.2</span>  How to create an RStudio Project?</a></li>
+  </ul></li>
+  <li><a href="#the-working-directory-in-r" id="toc-the-working-directory-in-r" class="nav-link" data-scroll-target="#the-working-directory-in-r"><span class="toc-section-number">1.2</span>  The working directory in R</a>
+  <ul class="collapse">
+  <li><a href="#further-links" id="toc-further-links" class="nav-link" data-scroll-target="#further-links"><span class="toc-section-number">1.2.1</span>  Further links</a></li>
+  </ul></li>
+  <li><a href="#readrs-general-functions" id="toc-readrs-general-functions" class="nav-link" data-scroll-target="#readrs-general-functions"><span class="toc-section-number">1.3</span>  <code>readr</code>’s general functions…</a></li>
+  <li><a href="#and-their-additional-arguments" id="toc-and-their-additional-arguments" class="nav-link" data-scroll-target="#and-their-additional-arguments"><span class="toc-section-number">1.4</span>  …and their additional arguments</a>
+  <ul class="collapse">
+  <li><a href="#column-types" id="toc-column-types" class="nav-link" data-scroll-target="#column-types"><span class="toc-section-number">1.4.1</span>  Column types</a></li>
+  </ul></li>
+  <li><a href="#rds-and-.rdatafiles" id="toc-rds-and-.rdatafiles" class="nav-link" data-scroll-target="#rds-and-.rdatafiles"><span class="toc-section-number">1.5</span>  <code>.rds</code> and <code>.RData</code>files</a></li>
+  <li><a href="#write-data" id="toc-write-data" class="nav-link" data-scroll-target="#write-data"><span class="toc-section-number">2</span>  Write data</a>
+  <ul class="collapse">
+  <li><a href="#write_csv" id="toc-write_csv" class="nav-link" data-scroll-target="#write_csv"><span class="toc-section-number">2.1</span>  <code>write_csv()</code></a></li>
+  <li><a href="#write_rds" id="toc-write_rds" class="nav-link" data-scroll-target="#write_rds"><span class="toc-section-number">2.2</span>  <code>write_rds()</code></a></li>
+  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save"><span class="toc-section-number">2.3</span>  <code>save()</code></a></li>
+  <li><a href="#alternative-ways-to-read-in-and-write-data" id="toc-alternative-ways-to-read-in-and-write-data" class="nav-link" data-scroll-target="#alternative-ways-to-read-in-and-write-data"><span class="toc-section-number">2.4</span>  Alternative ways to read in and write data</a>
+  <ul class="collapse">
+  <li><a href="#haven" id="toc-haven" class="nav-link" data-scroll-target="#haven"><span class="toc-section-number">2.4.1</span>  <code>haven</code></a></li>
+  <li><a href="#readxl" id="toc-readxl" class="nav-link" data-scroll-target="#readxl"><span class="toc-section-number">2.4.2</span>  <code>readxl</code></a></li>
+  <li><a href="#vroom" id="toc-vroom" class="nav-link" data-scroll-target="#vroom"><span class="toc-section-number">2.4.3</span>  <code>vroom</code></a></li>
+  <li><a href="#further-readings" id="toc-further-readings" class="nav-link" data-scroll-target="#further-readings"><span class="toc-section-number">2.4.4</span>  Further readings</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>As some of you are beginners, it might be hard for you to see the point in setting up Projects and a GitHub account already. The intermediate and advanced users among you, who are not familiar with projects and GitHub yet though, might also wonder what they would need it for: working with R has gone pretty well in the past, so why should you change this running system?</p>
+<p>I start out making points on why using Projects is useful. Then, I will provide step-by-step guidance on how to set them up. Since using GitHub is not that straight-forward, I will motivate why to use it and then link to a bigger tutorial covering the setup process (again by Jennifer Bryan, a statistic professor who also works at RStudio).</p>
+<section id="rstudio-projects" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="rstudio-projects"><span class="header-section-number">1.1</span> RStudio Projects</h2>
+<section id="motivation" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">1.1.1</span> Motivation</h3>
+<p>Disclaimer: those things might not be entirely clear right away. However, I am deeply convinced that it is important that you use R and RStudio properly from the start. Otherwise it won’t be as easy to re-build the right habits.</p>
+<p>If you analyze data with R, one of the first things you do is to load in the data that you want to perform your analyses on. Then, you perform your analyses on them, and save the results in the (probably) same directory.<br>
+When you load a data set into R, you might use the <code>readr</code> package and do <code>read_csv(absolute_file_path.csv)</code>. This becomes fairly painful if you need to read in more than one data set. Then, relative paths (i.e., where you start from a certain point in your file structure, e.g., your file folder) become more useful. How you CAN go across this is to use the <code>setwd(absolute_file_path_to_your_directory)</code> function. Here, <code>set</code> stands for set and <code>wd</code> stands for working directory. If you are not sure about what the current working directory actually is, you can use <code>getwd()</code> which is the equivalent to <code>setwd(file_path)</code>. This enables you to read in a data set – if the file is in the working directory – by only using <code>read_csv(file_name.csv)</code>.<br>
+However, if you have ever worked on an R project with other people in a group and exchanged scripts regularly, you may have encountered one of the big problems with this <code>setwd(file_path)</code> approach: as it only takes absolute paths like this one: “/Users/felixlennert/Library/Mobile Documents/com<sub>apple</sub>CloudDocs/phd/teaching/hhs-stockholm/fall2021/scripts/”, no other person will be able to run this script without making any changes<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Just to be clear: there are no two machines which have the exact same file structure.</p>
+<p>This is where RStudio Projects come into play: they make every file path relative. The Project file (ends with .Rproj) basically sets the working directory to the folder it is in. Hence, if you want to send your work to a peer or a teacher, just send a folder which also contains the .Rproj file and they will be able to work on your project without the hassle of pasting file paths into <code>setwd()</code> commands.</p>
+</section>
+<section id="how-to-create-an-rstudio-project" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="how-to-create-an-rstudio-project"><span class="header-section-number">1.1.2</span> How to create an RStudio Project?</h3>
+<p>I strongly suggest that you set up a project which is dedicated to this workshop</p>
+<ol type="1">
+<li>In RStudio, click File &gt;&gt; New Project…</li>
+<li>A windows pops up which lets you select between “New Directory”, “Existing Directory”, and “Version Control.” The first option creates a new folder which is named after your project, the second one “associates a project with an existing working directory,” and the third one only applies to version control (like, for instance, GitHub) users. I suggest that you click “New Directory”.</li>
+<li>Now you need to specify the type of the project (Empty project, R package, or Shiny Web Application). In our case, you will need a “new project.” Hit it!<br>
+</li>
+<li>The final step is to choose the folder the project will live in. If you have already created a folder which is dedicated to this course, choose this one, and let the project live in there as a sub-directory.</li>
+<li>When you write code for our course in the future, you <em>first</em> open the R project – by double-clicking the .Rproj file – and then create either a new script or open a former one (e.g., by going through the “Files” tab in the respective pane which will show the right directory already.)</li>
+</ol>
+</section>
+</section>
+<section id="the-working-directory-in-r" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="the-working-directory-in-r"><span class="header-section-number">1.2</span> The working directory in R</h2>
+<p>As mentioned when introducing RStudio Projects, there are two kinds of file paths you can provide R with: absolute and relative paths.</p>
+<p>The absolute path for this script on my machine looks like this: “/Users/felixlennert/Documents/phd/teaching/data-prep_2days/data-cleaning-book/tidy-data.qmd”.<br>
+If you are on a Windows machine and copy file paths: R uses the file path separator <code>\</code> as a so-called escape character – hence, it does not recognize it as a file path separator. You can address this problem by either using double back-slashes <code>\\</code> or using a normal slash, <code>/</code>, instead.</p>
+<p>There is always a working directory you are in. You can obtain your working directory using <code>getwd()</code>. Relative paths then just build upon it. If you want to change your working directory, use <code>setwd()</code>.</p>
+<p><em>Please note that I included the former two paragraphs just for the record. You should never use absolute paths, except for if you are planning to keep the same machine for the rest of your life and never change any of your file structure. You are not. Hence, please use RStudio Projects.</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>If you are using RStudio Projects, your working directory defaults to the folder your <code>.Rproj</code> file is stored in. So, I guess you could immediately see the merit of using RStudio projects: by using them, you can do away with all the faff of setting working directories, copying crazy long absolute paths, and, relatedly, searching for typos in them.</p>
+<p>If you are working in RMarkdown, or quarto, its successor, the working directory is where your RMarkdown document is stored in.</p>
+<section id="further-links" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="further-links"><span class="header-section-number">1.2.1</span> Further links</h3>
+<ul>
+<li>Hadley Wickham and Garrett Grolemund wrote an <a href="https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects">entire chapter</a> in R4DS on Projects.<br>
+</li>
+<li>Need more motivation? Jennifer Bryan tells you under which circumstances she would set your machine on fire: <a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">Project-oriented workflow</a>.</li>
+<li>If you have created your project folder and are now unsure how to structure it, read Chris von Csefalvay’s <a href="https://chrisvoncsefalvay.com/2018/08/09/structuring-r-projects/">blog post</a> on how to do it.</li>
+</ul>
+</section>
+</section>
+<section id="readrs-general-functions" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="readrs-general-functions"><span class="header-section-number">1.3</span> <code>readr</code>’s general functions…</h2>
+<p>In general, importing data with <code>readr</code> is pretty hassle-free: the hardest thing about it is calling the right function. It usually takes care of the rest itself, parsing columns properly, etc. However, sometimes you need to specify additional arguments.</p>
+<p>The following unordered list shows the most common <code>read_*()</code> functions. Usually, you can simply provide them a file path and they load in the data and return a Tibble. If your data is in a compressed file with the extension <code>.gz</code>, <code>.bz2</code>, <code>.xz</code>, or <code>.zip</code>, <code>readr</code> will automatically uncompress it. If the file is stored online, you can provide a URL starting with <code>http://</code>, <code>https://</code>, <code>ftp://</code>, or <code>ftps://</code>. <code>readr</code> will automatically take care of the download process.</p>
+<ul>
+<li><code>read_csv("file.csv")</code> reads comma delimited files<br>
+</li>
+<li><code>read_csv2("file.csv")</code> reads semi-colon delimited files and treats commas as decimal separator<br>
+</li>
+<li><code>read_delim("file.txt", delim = "|")</code> reads files which are delimited by whatever delimiter you specify (<code>|</code> in this case)<br>
+</li>
+<li><code>read_fwf("file.fwf", col_positions = c(1, 3, 5))</code> reads fixed width files. Here, some sort of data on the columns must be provided, e.g., their positions in the file<br>
+</li>
+<li>If the values are separated by whitespace, you can also use <code>read_tsv("file.tsv")</code> or <code>read_table("file.tsv")</code></li>
+</ul>
+</section>
+<section id="and-their-additional-arguments" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="and-their-additional-arguments"><span class="header-section-number">1.4</span> …and their additional arguments</h2>
+<p>Also, all these functions share certain arguments which just need to be included in the call. In the following, I will enumerate the most useful ones.</p>
+<ul>
+<li>If your file does not have a header (most of the time, column names), provide <code>col_names = FALSE</code>. The resulting Tibble will have <code>X1 … Xn</code> as column names<br>
+</li>
+<li>If your file does not have column names, but you want the resulting Tibble to have some, you can specify them with <code>col_names = c("a", "b", "c")</code>. It takes a character vector.<br>
+</li>
+<li>If there are rows you do not want to be considered, you can use <code>skip =</code>. For instance, <code>read_csv("file.csv", skip = 6)</code> reads everything but the first six data rows (the very first row is not taken into consideration as well)<br>
+</li>
+<li>Sometimes the original creator of your data set might go across missing values differently than you would want it to. <code>na =</code> can be used to specify which values shall be considered missing. If your missings are coded as 99 and 999, for instance, you can address that in the read-in process already by using <code>read_csv("file.csv", na = c("99", "999"))</code>. Please note that it takes a character vector as argument<br>
+</li>
+<li>In some data sets, the first rows consists of comments that start with particular signs or special characters. Using <code>comment =</code> allows you to skip these lines. For instance, <code>read_csv("file.csv", comment = "#")</code> drops all the rows that beginn with a hash.</li>
+</ul>
+<section id="column-types" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="column-types"><span class="header-section-number">1.4.1</span> Column types</h3>
+<p>As you have already learned in the script before, a Tibble consists of multiple vectors of the same length. The vectors can be of different types. When you read in data using <code>readr</code>, it will print out the column types it has guessed. When you read in data, you must ascribe it to an object in your environment. The following code reads in a <code>.csv</code> file with data on the 100 most-played songs on Spotify in 2018 and stores it in the object <code>spotify_top100_2018</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+✔ tibble  3.1.8      ✔ dplyr   1.0.10
+✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+✔ readr   2.1.3      ✔ forcats 0.5.2 
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># library(readr) --&gt; no need to load readr, it's part of the core tidyverse</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>spotify_top100_2018 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://www.dropbox.com/s/z8d6irpjdohdktf/spotify2018.csv?dl=1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 100 Columns: 16
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (3): id, name, artists
+dbl (13): danceability, energy, key, loudness, mode, speechiness, acousticne...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>If your data is well-behaved, R will guess the vector types correctly and everything will run smoothly. However, sooner or later you will stumble across a data set which is not well-behaved. This is where knowing how to fine-tune your parsing process up-front will eventually save you a lot of head scratching.</p>
+<p>But how does parsing actually look like. Well, <code>readr</code>’s parsing functions take a character vector and return a more specialized vector.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_double</span>(<span class="fu">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3</code></pre>
+</div>
+</div>
+<p>So far so good. What <code>readr</code>does when it reads in your data sets is that it takes the first 1,000 values of every column and tries to guess the correct data type. This can be emulated using <code>guess_parser()</code> and <code>parse_guess()</code>. Both functions take a character vector as input. The former one returns the guessed type, the latter returns a vector which is parsed to the type it has guessed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">guess_parser</span>(<span class="st">"2009-04-23"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "date"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">parse_guess</span>(<span class="st">"2009-04-23"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Date[1:1], format: "2009-04-23"</code></pre>
+</div>
+</div>
+<p>The heuristic it uses is fairly simple yet robust. However, there are common cases when you might run into problems with different data types. In the following, I will show you the two most common ones. The first one regards numeric data, the second one data on date and time.</p>
+<section id="numbers" class="level4" data-number="1.4.1.1">
+<h4 data-number="1.4.1.1" class="anchored" data-anchor-id="numbers"><span class="header-section-number">1.4.1.1</span> Numbers</h4>
+<p>Parsing numbers should be straight-forward, right, so what could possibly go wrong?</p>
+<p>Well…</p>
+<ul>
+<li>Decimal points<br>
+</li>
+<li>Special characters ($, %, §, €)<br>
+</li>
+<li>So-called grouping characters such as 1,000,000 (USA) or 1.000.000 (Germany) or 1’000’000 (Switzerland)</li>
+</ul>
+<p>The problem with decimale points (– and commas) can be addresses by specifying a <code>locale</code>. Compare:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_double</span>(<span class="st">"1,3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: 1 parsing failure.
+row col               expected actual
+  1  -- no trailing characters    1,3</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA
+attr(,"problems")
+# A tibble: 1 × 4
+    row   col expected               actual
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;                  &lt;chr&gt; 
+1     1    NA no trailing characters 1,3   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_double</span>(<span class="st">"1,3"</span>, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">decimal_mark =</span> <span class="st">","</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.3</code></pre>
+</div>
+</div>
+<p>The special character problem can be addressed using <code>parse_number</code> instead of <code>parse_double</code>: it will ignore the special characters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(<span class="st">"1.5€"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.5</code></pre>
+</div>
+</div>
+<p>The final problem, grouping characters, can be addressed using another <code>locale</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(<span class="st">"1.300.000"</span>, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">grouping_mark =</span> <span class="st">"."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1300000</code></pre>
+</div>
+</div>
+</section>
+<section id="date-and-time" class="level4" data-number="1.4.1.2">
+<h4 data-number="1.4.1.2" class="anchored" data-anchor-id="date-and-time"><span class="header-section-number">1.4.1.2</span> Date and time</h4>
+<p>Date vectors in R are numeric vectors indicating how many days have passed since 1970. Date-Time vectors indicate the seconds that have passed since 1970-01-01 00:00:00. Time vectors indicate the number of seconds that have passed since midnight.</p>
+<p>The <code>parse_*()</code> functions expect the vectors to be in a certain format:</p>
+<ul>
+<li><code>parse_datetime()</code> expects the input to follow the ISO8601 standard. The times components must be ordered from biggest to smallest: year, month, day, hour, minute, second.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_datetime</span>(<span class="st">"2000-02-29T2000"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29 20:00:00 UTC"</code></pre>
+</div>
+</div>
+<ul>
+<li><code>parse_date()</code> wants a four digit year, two digit month, and two digit day. They can be separated by either “-” or “/”.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">"2000-02-29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(<span class="st">"2000/02/29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+</div>
+<p>Do you wonder why I chose 2000-02-29? It’s R’s birthday…</p>
+<ul>
+<li><code>parse_time()</code> needs at least hours and minutes, seconds are optional. They need to be separated by colons. There is no proper built-in class for time data in Base R. Hence, I will use the <code>hms</code> package here.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hms)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_time</span>(<span class="st">"20:15:00"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>20:15:00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_time</span>(<span class="st">"20:15"</span>) <span class="co"># both works</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>20:15:00</code></pre>
+</div>
+</div>
+<p>When it comes to dates, you can also build your own format. Just mash together the following pieces:</p>
+<ul>
+<li>Year: <code>%Y</code> – year in 4 digits; <code>%y</code> – year in two digits following this rule: 00–69 = 2000–2069, 70–99 = 1970–1999<br>
+</li>
+<li>Month: <code>%m</code> – two digits; <code>%b</code> – abbreviated name (e.g., “Nov”); <code>%B</code> – full name (e.g., “November”)<br>
+</li>
+<li>Day: <code>%d</code> – two digits<br>
+</li>
+<li>Time: <code>%H</code> – hour, 0–23; <code>%h</code> – hour, 1–12, must come together with <code>%p</code> – a.m./p.m. indicator; <code>%M</code> – minutes; <code>%S</code> – integer seconds; <code>%Z</code> time zone – <code>America/Chicago</code> for instance<br>
+</li>
+<li>Non-digits: <code>%.</code> skips one non-digit character; <code>%*</code> skips any number of non-digits</li>
+</ul>
+<p>You might see that there can emerge problems with this. You might, for example, have something like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>example_date <span class="ot">&lt;-</span> <span class="st">"29. Februar 2000"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So how can you parse this date with a German month name? Again, you can use <code>locale =</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date_names_langs</span>() <span class="co"># what could be the proper abbreviation?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] "af"  "agq" "ak"  "am"  "ar"  "as"  "asa" "az"  "bas" "be"  "bem" "bez"
+ [13] "bg"  "bm"  "bn"  "bo"  "br"  "brx" "bs"  "ca"  "cgg" "chr" "cs"  "cy" 
+ [25] "da"  "dav" "de"  "dje" "dsb" "dua" "dyo" "dz"  "ebu" "ee"  "el"  "en" 
+ [37] "eo"  "es"  "et"  "eu"  "ewo" "fa"  "ff"  "fi"  "fil" "fo"  "fr"  "fur"
+ [49] "fy"  "ga"  "gd"  "gl"  "gsw" "gu"  "guz" "gv"  "ha"  "haw" "he"  "hi" 
+ [61] "hr"  "hsb" "hu"  "hy"  "id"  "ig"  "ii"  "is"  "it"  "ja"  "jgo" "jmc"
+ [73] "ka"  "kab" "kam" "kde" "kea" "khq" "ki"  "kk"  "kkj" "kl"  "kln" "km" 
+ [85] "kn"  "ko"  "kok" "ks"  "ksb" "ksf" "ksh" "kw"  "ky"  "lag" "lb"  "lg" 
+ [97] "lkt" "ln"  "lo"  "lt"  "lu"  "luo" "luy" "lv"  "mas" "mer" "mfe" "mg" 
+[109] "mgh" "mgo" "mk"  "ml"  "mn"  "mr"  "ms"  "mt"  "mua" "my"  "naq" "nb" 
+[121] "nd"  "ne"  "nl"  "nmg" "nn"  "nnh" "nus" "nyn" "om"  "or"  "os"  "pa" 
+[133] "pl"  "ps"  "pt"  "qu"  "rm"  "rn"  "ro"  "rof" "ru"  "rw"  "rwk" "sah"
+[145] "saq" "sbp" "se"  "seh" "ses" "sg"  "shi" "si"  "sk"  "sl"  "smn" "sn" 
+[157] "so"  "sq"  "sr"  "sv"  "sw"  "ta"  "te"  "teo" "th"  "ti"  "to"  "tr" 
+[169] "twq" "tzm" "ug"  "uk"  "ur"  "uz"  "vai" "vi"  "vun" "wae" "xog" "yav"
+[181] "yi"  "yo"  "zgh" "zh"  "zu" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date</span>(example_date, <span class="at">format =</span> <span class="st">"%d%. %B %Y"</span>, <span class="at">locale =</span> <span class="fu">locale</span>(<span class="at">date_names =</span> <span class="st">"de"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+</div>
+<p>Now you know how to parse number and date vectors yourself. This is nice, but normally you do not want to read in data, put it into character vectors and then parse it to the right data format. You want to read in a data set and get a Tibble whose columns consist of data which have been parsed to the right type already.</p>
+</section>
+<section id="parsing-entire-files" class="level4" data-number="1.4.1.3">
+<h4 data-number="1.4.1.3" class="anchored" data-anchor-id="parsing-entire-files"><span class="header-section-number">1.4.1.3</span> Parsing entire files</h4>
+<p>As mentioned earlier, the <code>read_*</code> functions take the first 1000 rows and then guess the columns format. I emulated this using the <code>guess_parser()</code> function.</p>
+<p>If <code>readr</code> finds values in a column that do not match the type of the column which it has guessed in first place, or entirely fails to parse a column (e.g., because it only consists of <code>NAs</code>), it returns parsing failures. They can be obtained using <code>problems()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>challenge <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">readr_example</span>(<span class="st">"challenge.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 2000 Columns: 2
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl  (1): x
+date (1): y
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(challenge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+      x y     
+  &lt;dbl&gt; &lt;date&gt;
+1   404 NA    
+2  4172 NA    
+3  3004 NA    
+4   787 NA    
+5    37 NA    
+6  2332 NA    </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">problems</span>(challenge)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 0 × 5
+# … with 5 variables: row &lt;int&gt;, col &lt;int&gt;, expected &lt;chr&gt;, actual &lt;chr&gt;,
+#   file &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>When looking at the parsing failures here, what catches the eye is that the first 1000 values of <code>challenge$y</code> seem to be NA. Because <code>readr</code> only takes the first 1000 rows into account, it parses <code>challenge$y</code> as <code>logical</code>. However, it should be considered a <code>date</code> column. You can specify this using <code>col_types =</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>challenge_w_date <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">readr_example</span>(<span class="st">"challenge.csv"</span>),</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">x =</span> <span class="fu">col_number</span>(),</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">y =</span> <span class="fu">col_date</span>()</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>                             ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In general, every <code>parse_*</code> function has its <code>col_*</code> counterpart.</p>
+<p>If you want to read in data and change the column specifications, there is a little shortcut:</p>
+<p>First, read in your data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>challenge <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">readr_example</span>(<span class="st">"challenge.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 2000 Columns: 2
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl  (1): x
+date (1): y
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>Second, you can copy the column specification from the output to your clipboard:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#This part: </span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#cols(</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  x = col_double(),</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  y = col_logical()</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Third, provide it your <code>read_csv()</code> call as a <code>col_types =</code> argument (by simply pasting it):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#challenge &lt;- read_csv(readr_example("challenge.csv"),</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                     col_types = cols(</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                       x = col_double(),</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  needs to be modified --&gt; y = col_logical()</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                            ))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Fourth, modify the argument:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#challenge_w_date &lt;- read_csv(readr_example("challenge.csv"),</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                             col_types = cols(</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                               x = col_number(),</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  modified --&gt;                 y = col_date()</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                            ))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Fifth, read it in:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>challenge_w_date <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">readr_example</span>(<span class="st">"challenge.csv"</span>),</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">x =</span> <span class="fu">col_number</span>(),</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y =</span> <span class="fu">col_date</span>()</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>                      ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="rds-and-.rdatafiles" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="rds-and-.rdatafiles"><span class="header-section-number">1.5</span> <code>.rds</code> and <code>.RData</code>files</h2>
+<p><code>.rds</code> files can be used to store singular R-specific objects (such as lists), <code>.RData</code> files can be used to store multiple R-specific objects. The former can be read in using <code>read_rds("file.rds")</code>, the latter with <code>load("file.RData")</code>. More on <code>read_rds()</code> <a href="https://readr.tidyverse.org/reference/read_rds.html">here</a> and <code>.RData</code> <a href="http://www.sthda.com/english/wiki/saving-data-into-r-data-format-rds-and-rdata">here</a></p>
+</section>
+<section id="write-data" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Write data</h1>
+<section id="write_csv" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="write_csv"><span class="header-section-number">2.1</span> <code>write_csv()</code></h2>
+<p>Writing data is fairly straight-forward. Most of the times, you will work with plain Tibbles which consist of different kinds of vectors except for lists. If you want to store them, I recommend you to simply use <code>write_csv(tibble, path = "file.csv")</code>. If you plan on working on the <code>.csv</code> file in Excel, use <code>write_excel_csv(tibble, path = "file.csv")</code></p>
+</section>
+<section id="write_rds" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="write_rds"><span class="header-section-number">2.2</span> <code>write_rds()</code></h2>
+<p>Sometimes, however, it might be impossible to create a <code>.csv</code> file of your data – e.g., if you want to store a list. This is what you can use <code>write_rds(r_specific_object, path = "file.rds")</code> for.</p>
+</section>
+<section id="save" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="save"><span class="header-section-number">2.3</span> <code>save()</code></h2>
+<p>Akin to <code>.rds</code> files are <code>.RData</code> files. They can contain multiple objects and be written using <code>save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")</code>. You can save your entire workspace as well by calling <code>save.image(file = "file.RData")</code>.</p>
+</section>
+<section id="alternative-ways-to-read-in-and-write-data" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="alternative-ways-to-read-in-and-write-data"><span class="header-section-number">2.4</span> Alternative ways to read in and write data</h2>
+<p>There do also other packages exist for different data types. I will explain the ones which might be of particular use for you and their main-functions only briefly.</p>
+<section id="haven" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="haven"><span class="header-section-number">2.4.1</span> <code>haven</code></h3>
+<p>You can use <code>haven</code> <span class="citation" data-cites="wickham2020c">(<a href="references.html#ref-wickham2020c" role="doc-biblioref"><strong>wickham2020c?</strong></a>)</span> for reading and writing SAS (suffixes <code>.sas7bdat</code>, <code>.sas7bcat</code>, and <code>.xpt</code>), SPSS (suffixes <code>.sav</code> and <code>.por</code>), and STATA (suffix <code>.dta</code>) files.</p>
+<p>The functions then are:</p>
+<ul>
+<li><code>read_sas("file.sas7bdate"</code> and <code>write_sas(tibble, "file.sas7bdat")</code> for both <code>.sas7bdat</code> and <code>.sas7bcat</code> files. <code>read_xpt("file.xpt")</code> reads <code>.xpt</code> files<br>
+</li>
+<li><code>read_sav("file.sav")</code> and <code>read_por("file.por")</code> for <code>.sav</code> and <code>.por</code> files. <code>write_sav(tibble, "file.sav"</code> writes a the Tibble <code>tibble</code> to the file <code>file.sav</code><br>
+</li>
+<li><code>read_dta("file.dta")</code> and <code>write_dta(tibble, "file.dta")</code> read and write <code>.dta</code> files</li>
+</ul>
+<p>The additional arguments can be found in the <a href="https://cran.r-project.org/web/packages/haven/vignettes/semantics.html">vignette</a>.</p>
+</section>
+<section id="readxl" class="level3" data-number="2.4.2">
+<h3 data-number="2.4.2" class="anchored" data-anchor-id="readxl"><span class="header-section-number">2.4.2</span> <code>readxl</code></h3>
+<p><code>readxl</code> <span class="citation" data-cites="wickham2019e">(<a href="references.html#ref-wickham2019e" role="doc-biblioref"><strong>wickham2019e?</strong></a>)</span> can be used to read Excel files. <code>read_excel("file.xls")</code> works for both <code>.xls</code> and <code>.xlsx</code> files alike. It guesses the data type from the suffix. Excel files often consist of multiple sheets. <code>excel_sheets("file.xlsx")</code> returns the name of the singular sheets. When dealing with an Excel file that contains multiple sheets, you need to specify the sheet you are after in the <code>read_excel()</code> function: <code>read_excel("file.xlsx", sheet = "sheet_1")</code>. Please note that it only takes one sheet at a time.</p>
+<p>More on the <code>readxl</code> package can be found <a href="https://readxl.tidyverse.org">here</a>.</p>
+</section>
+<section id="vroom" class="level3" data-number="2.4.3">
+<h3 data-number="2.4.3" class="anchored" data-anchor-id="vroom"><span class="header-section-number">2.4.3</span> <code>vroom</code></h3>
+<p><code>vroom</code> has been introduced recently. It claims to be able to read in delimited files with up to 1.4 GB/s. Regarding its arguments, <code>vroom</code> works in the same way as the <code>read_*()</code> functions from the <code>readr</code> package. I would recommend you to use <code>vroom</code> as soon as your dataset’s size exceeds ~100 MB.</p>
+<p>More on <code>vroom</code> <a href="https://vroom.r-lib.org/reference/vroom.html">here</a> and <a href="https://dcl-wrangle.stanford.edu/read-write.html">here</a>.</p>
+</section>
+<section id="further-readings" class="level3" data-number="2.4.4">
+<h3 data-number="2.4.4" class="anchored" data-anchor-id="further-readings"><span class="header-section-number">2.4.4</span> Further readings</h3>
+<ul>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces">Information on working directories</a><br>
+</li>
+<li>Websites of the singular packages: <a href="https://readr.tidyverse.org">readr</a>, <a href="https://haven.tidyverse.org">haven</a>, <a href="https://readxl.tidyverse.org">readxl</a>, <a href="https://vroom.r-lib.org">vroom</a><br>
+</li>
+<li><code>readr</code> <a href="https://rawgit.com/rstudio/cheatsheets/master/data-import.pdf">Cheatsheet</a><br>
+</li>
+<li>Chapter in R for Data Science <span class="citation" data-cites="wickham2016a">(<a href="references.html#ref-wickham2016a" role="doc-biblioref"><strong>wickham2016a?</strong></a>)</span> regarding <a href="https://r4ds.had.co.nz/data-import.html">data import</a></li>
+</ul>
+
+
+</section>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>This becomes especially painful if you teach R to your students and have to grade 20 submissions and, hence, have to paste your personal directory’s file path into each of these submissions.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>you can find the thoughts of one of the main author of the <code>knitr</code> package on working directories <a href="https://groups.google.com/forum/#!topic/knitr/knM0VWoexT0">here</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tidy-data.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

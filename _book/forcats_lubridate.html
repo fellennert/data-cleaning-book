@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data cleaning for social scientists - 4&nbsp; Factors with forcats</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ggplot2.html" rel="next">
+<link href="./dplyr.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data cleaning for social scientists</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./projects_readr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tidy-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forcats_lubridate.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#creating-a-factor" id="toc-creating-a-factor" class="nav-link active" data-scroll-target="#creating-a-factor"><span class="toc-section-number">4.1</span>  Creating a factor</a></li>
+  <li><a href="#some-basic-operations" id="toc-some-basic-operations" class="nav-link" data-scroll-target="#some-basic-operations"><span class="toc-section-number">4.2</span>  Some basic operations</a>
+  <ul class="collapse">
+  <li><a href="#reordering-factors" id="toc-reordering-factors" class="nav-link" data-scroll-target="#reordering-factors"><span class="toc-section-number">4.2.1</span>  Reordering factors</a></li>
+  <li><a href="#modifying-levels" id="toc-modifying-levels" class="nav-link" data-scroll-target="#modifying-levels"><span class="toc-section-number">4.2.2</span>  Modifying levels</a></li>
+  </ul></li>
+  <li><a href="#further-links" id="toc-further-links" class="nav-link" data-scroll-target="#further-links"><span class="toc-section-number">4.3</span>  Further links</a></li>
+  <li><a href="#dates" id="toc-dates" class="nav-link" data-scroll-target="#dates"><span class="toc-section-number">4.4</span>  Dates</a></li>
+  <li><a href="#date-times" id="toc-date-times" class="nav-link" data-scroll-target="#date-times"><span class="toc-section-number">4.5</span>  Date-times</a></li>
+  <li><a href="#further-handy-things" id="toc-further-handy-things" class="nav-link" data-scroll-target="#further-handy-things"><span class="toc-section-number">4.6</span>  Further handy things</a></li>
+  <li><a href="#manipulating-dates" id="toc-manipulating-dates" class="nav-link" data-scroll-target="#manipulating-dates"><span class="toc-section-number">4.7</span>  Manipulating dates</a>
+  <ul class="collapse">
+  <li><a href="#components" id="toc-components" class="nav-link" data-scroll-target="#components"><span class="toc-section-number">4.7.1</span>  Components</a></li>
+  <li><a href="#rounding" id="toc-rounding" class="nav-link" data-scroll-target="#rounding"><span class="toc-section-number">4.7.2</span>  Rounding</a></li>
+  </ul></li>
+  <li><a href="#time-zones" id="toc-time-zones" class="nav-link" data-scroll-target="#time-zones"><span class="toc-section-number">4.8</span>  Time zones</a></li>
+  <li><a href="#periods-durations-intervals" id="toc-periods-durations-intervals" class="nav-link" data-scroll-target="#periods-durations-intervals"><span class="toc-section-number">4.9</span>  Periods, durations, intervals</a>
+  <ul class="collapse">
+  <li><a href="#periods" id="toc-periods" class="nav-link" data-scroll-target="#periods"><span class="toc-section-number">4.9.1</span>  Periods</a></li>
+  <li><a href="#durations" id="toc-durations" class="nav-link" data-scroll-target="#durations"><span class="toc-section-number">4.9.2</span>  Durations</a></li>
+  <li><a href="#intervals" id="toc-intervals" class="nav-link" data-scroll-target="#intervals"><span class="toc-section-number">4.9.3</span>  Intervals</a></li>
+  </ul></li>
+  <li><a href="#further-links-1" id="toc-further-links-1" class="nav-link" data-scroll-target="#further-links-1"><span class="toc-section-number">4.10</span>  Further links</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Factors are used in R to represent categorical data. In the following, I will briefly introduce you to the <code>forcats</code> package (nice anagram, Hadley!). Factors are augmented vectors which build upon integers. If you want to learn more about them, consider reading <a href="https://peerj.com/preprints/3163/">this paper</a>.</p>
+<section id="creating-a-factor" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="creating-a-factor"><span class="header-section-number">4.1</span> Creating a factor</h2>
+<p>You can create a factor in two manners.</p>
+<ol type="1">
+<li>Take a character vector and coerce it to a factor</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+✔ tibble  3.1.8      ✔ dplyr   1.0.10
+✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+✔ readr   2.1.3      ✔ forcats 0.5.2 
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>parties <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"AfD"</span>, <span class="st">"CDU"</span>, <span class="st">"CSU"</span>, <span class="st">"FDP"</span>, <span class="st">"Greens"</span>, <span class="st">"Leftists"</span>, <span class="st">"SPD"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>parties_fct <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(parties)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(parties_fct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Create it from scratch by providing levels and a vector respectively</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>party_sample <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(parties, <span class="dv">49</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"CUD"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(party_sample, <span class="at">levels =</span> parties)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] Greens   AfD      Leftists CSU      SPD      SPD      CSU      FDP     
+ [9] AfD      Leftists CDU      AfD      FDP      AfD      FDP      CSU     
+[17] AfD      SPD      SPD      FDP      FDP      CDU      FDP      AfD     
+[25] CSU      FDP      AfD      CSU      AfD      CSU      FDP      AfD     
+[33] AfD      AfD      AfD      AfD      CSU      CDU      Leftists CDU     
+[41] FDP      AfD      CSU      Leftists FDP      SPD      AfD      FDP     
+[49] FDP      &lt;NA&gt;    
+Levels: AfD CDU CSU FDP Greens Leftists SPD</code></pre>
+</div>
+</div>
+<p>If you want to access the levels, use <code>levels()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(parties_fct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AfD"      "CDU"      "CSU"      "FDP"      "Greens"   "Leftists" "SPD"     </code></pre>
+</div>
+</div>
+</section>
+<section id="some-basic-operations" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="some-basic-operations"><span class="header-section-number">4.2</span> Some basic operations</h2>
+<p>I will have a further look into factors using data on the presidential elections in the U.S.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://www.dropbox.com/s/82xuhcwhv7wh314/pres16results.csv?dl=1"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 18475 Columns: 9
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (5): county, fips, cand, st, lead
+dbl (4): pct_report, votes, total_votes, pct
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 18,007
+Columns: 9
+$ county      &lt;chr&gt; "Los Angeles County", "Los Angeles County", "Los Angeles C…
+$ fips        &lt;chr&gt; "6037", "6037", "6037", "6037", "6037", "17031", "17031", …
+$ cand        &lt;chr&gt; "Hillary Clinton", "Donald Trump", "Gary Johnson", "Jill S…
+$ st          &lt;chr&gt; "CA", "CA", "CA", "CA", "CA", "IL", "IL", "IL", "IL", "TX"…
+$ pct_report  &lt;dbl&gt; 1.0000, 1.0000, 1.0000, 1.0000, 1.0000, 0.9746, 0.9746, 0.…
+$ votes       &lt;dbl&gt; 1654626, 542591, 56905, 46682, 13471, 1528582, 440213, 559…
+$ total_votes &lt;dbl&gt; 2314275, 2314275, 2314275, 2314275, 2314275, 2055215, 2055…
+$ pct         &lt;dbl&gt; 0.714965162, 0.234453987, 0.024588694, 0.020171328, 0.0058…
+$ lead        &lt;chr&gt; "Hillary Clinton", "Hillary Clinton", "Hillary Clinton", "…</code></pre>
+</div>
+</div>
+<p>Which variables should be converted to factors? – <code>county</code>, <code>cand</code>, <code>st</code>, <code>lead</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="ot">&lt;-</span> election_data <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> <span class="fu">as_factor</span>(county),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">candidate =</span> <span class="fu">as_factor</span>(cand),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">state =</span> <span class="fu">as_factor</span>(st),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">lead =</span> <span class="fu">as_factor</span>(lead)) <span class="sc">|&gt;</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, candidate, state, pct_report<span class="sc">:</span>pct, lead)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="reordering-factors" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="reordering-factors"><span class="header-section-number">4.2.1</span> Reordering factors</h3>
+<p>Sometimes you want to reorder factors – for instance, when you want to create plots. (Note: you will learn more on plots in the next session on data visualization)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="forcats_lubridate_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Two orders would make sense: alphabetical and according to their number of votes. <code>fct_reorder()</code> takes another variable and orders the factor according to it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">fct_reorder</span>(state, sum_votes)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="forcats_lubridate_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>If you want to have it ordered the other way round, multiply the ordering variable with -1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">|&gt;</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">fct_reorder</span>(state, sum_votes<span class="sc">*</span>(<span class="sc">-</span><span class="dv">1</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="forcats_lubridate_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You could also achieve this by calling <code>fct_rev()</code> afterwards: it reverses the order of the factor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">fct_reorder</span>(state, sum_votes),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">state =</span> <span class="fu">fct_rev</span>(state)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="forcats_lubridate_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>If you want to do bar plots, which you can use to depict the frequency of a value, you can order them according to the frequency they appear in using <code>fct_infreq()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lead =</span> lead <span class="sc">|&gt;</span> <span class="fu">fct_infreq</span>() <span class="sc">|&gt;</span> <span class="fu">fct_rev</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> lead)) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="forcats_lubridate_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="modifying-levels" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="modifying-levels"><span class="header-section-number">4.2.2</span> Modifying levels</h3>
+<p>Remember the first factor? You need to put some graphs together and decide that you would rather like to use the original German names for the parties. Go for <code>fct_recode()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>parties_fct_ger <span class="ot">&lt;-</span> <span class="fu">fct_recode</span>(parties_fct,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Buendnis90/Die Gruenen"</span> <span class="ot">=</span> <span class="st">"Greens"</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Die Linke"</span> <span class="ot">=</span> <span class="st">"Leftists"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Damn, now the levels are not in alphabetical order anymore.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(parties_fct_ger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AfD"                    "CDU"                    "CSU"                   
+[4] "FDP"                    "Buendnis90/Die Gruenen" "Die Linke"             
+[7] "SPD"                   </code></pre>
+</div>
+</div>
+<p>In this case, this can be done pretty quickly. Just copy the levels and manipulate the order:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>parties_fct_ger_alphabetical <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(parties_fct_ger, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">c</span>(<span class="st">"AfD"</span>, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"Buendnis90/Die Gruenen"</span>, </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"CDU"</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"CSU"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"Die Linke"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"FDP"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">"SPD"</span>))</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(parties_fct_ger_alphabetical)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AfD"                    "Buendnis90/Die Gruenen" "CDU"                   
+[4] "CSU"                    "Die Linke"              "FDP"                   
+[7] "SPD"                   </code></pre>
+</div>
+</div>
+<p>Now you need to write something for someone who is not particular familiar with the political landscape in Germany and rather wants “left,” “center,” and “right” instead of the party’s names. Give <code>fct_collapse()</code> a shot – and feel free to change it if you disagree with my classification.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lcr_ger <span class="ot">&lt;-</span> <span class="fu">fct_collapse</span>(parties_fct,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">left =</span> <span class="fu">c</span>(<span class="st">"Leftists"</span>, <span class="st">"Greens"</span>, <span class="st">"SPD"</span>),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">centre =</span> <span class="fu">c</span>(<span class="st">"CDU"</span>, <span class="st">"CSU"</span>, <span class="st">"FDP"</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">right =</span> <span class="fu">c</span>(<span class="st">"AfD"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                        )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Another thing you could do – and this is handy for the election data set – is collapsing things together according to their frequency of appearance. In the case of the election data set, this might be handy to lump together the candidates into three groups: Donald Trump, Hillary Clinton, and other.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">candidate =</span> <span class="fu">fct_lump</span>(candidate, <span class="at">n =</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 18,007 × 8
+   county             candidate       state pct_r…¹  votes total…²     pct lead 
+   &lt;fct&gt;              &lt;fct&gt;           &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;
+ 1 Los Angeles County Hillary Clinton CA      1     1.65e6 2314275 0.715   Hill…
+ 2 Los Angeles County Donald Trump    CA      1     5.43e5 2314275 0.234   Hill…
+ 3 Los Angeles County Gary Johnson    CA      1     5.69e4 2314275 0.0246  Hill…
+ 4 Los Angeles County Other           CA      1     4.67e4 2314275 0.0202  Hill…
+ 5 Los Angeles County Other           CA      1     1.35e4 2314275 0.00582 Hill…
+ 6 Cook County        Hillary Clinton IL      0.975 1.53e6 2055215 0.744   Hill…
+ 7 Cook County        Donald Trump    IL      0.975 4.40e5 2055215 0.214   Hill…
+ 8 Cook County        Gary Johnson    IL      0.975 5.59e4 2055215 0.0272  Hill…
+ 9 Cook County        Other           IL      0.975 3.05e4 2055215 0.0149  Hill…
+10 Harris County      Hillary Clinton TX      1     7.06e5 1302887 0.542   Hill…
+# … with 17,997 more rows, and abbreviated variable names ¹​pct_report,
+#   ²​total_votes</code></pre>
+</div>
+</div>
+<p>The problem here is that Gary Johnson appears as often as the two other candidates (have you ever heard of him?). Hence, <code>fct_lump()</code> cannot decide which levels to lump together. However, it has saved me a couple lines of code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">candidate =</span> <span class="fu">fct_lump</span>(candidate, <span class="at">n =</span> <span class="dv">2</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">fct_recode</span>(<span class="st">"Other"</span> <span class="ot">=</span> <span class="st">"Gary Johnson"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 18,007 × 8
+   county             candidate       state pct_r…¹  votes total…²     pct lead 
+   &lt;fct&gt;              &lt;fct&gt;           &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;
+ 1 Los Angeles County Hillary Clinton CA      1     1.65e6 2314275 0.715   Hill…
+ 2 Los Angeles County Donald Trump    CA      1     5.43e5 2314275 0.234   Hill…
+ 3 Los Angeles County Other           CA      1     5.69e4 2314275 0.0246  Hill…
+ 4 Los Angeles County Other           CA      1     4.67e4 2314275 0.0202  Hill…
+ 5 Los Angeles County Other           CA      1     1.35e4 2314275 0.00582 Hill…
+ 6 Cook County        Hillary Clinton IL      0.975 1.53e6 2055215 0.744   Hill…
+ 7 Cook County        Donald Trump    IL      0.975 4.40e5 2055215 0.214   Hill…
+ 8 Cook County        Other           IL      0.975 5.59e4 2055215 0.0272  Hill…
+ 9 Cook County        Other           IL      0.975 3.05e4 2055215 0.0149  Hill…
+10 Harris County      Hillary Clinton TX      1     7.06e5 1302887 0.542   Hill…
+# … with 17,997 more rows, and abbreviated variable names ¹​pct_report,
+#   ²​total_votes</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="further-links" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="further-links"><span class="header-section-number">4.3</span> Further links</h2>
+<ul>
+<li>The chapter in <a href="https://r4ds.had.co.nz/factors.html">R4DS</a></li>
+<li>If you want to learn more about factors, consider reading <a href="https://peerj.com/preprints/3163/">this paper</a></li>
+<li>Another <a href="https://www.r-bloggers.com/2020/06/working-with-factors-in-r-tutorial-forcats-package/">tutorial</a></li>
+</ul>
+</section>
+<section id="dates" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="dates"><span class="header-section-number">4.4</span> Dates</h2>
+<p>In the script about data import you have learned about how to parse dates: for <code>parse_date()</code>, dates have to be formatted in a certain standard or you need to provide it with one. This is often tedious. That’s where the <code>lubridate</code> package jumps in: it provides you with parsing functions that are more handy. They all take a character vector and the function’s name is related to the order of the date’s components. The functions recognize non-digit separators and are, therefore, most of the time a hassle-free way to parse dates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'lubridate'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    date, intersect, setdiff, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"2000-02-29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"2000 02 29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy</span>(<span class="st">"29.02.2000"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+</div>
+<p>There is also a function for quarters:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">yq</span>(<span class="st">"2000: Q3"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-07-01"</code></pre>
+</div>
+</div>
+</section>
+<section id="date-times" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="date-times"><span class="header-section-number">4.5</span> Date-times</h2>
+<p>They also have date-time equivalents:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd_hms</span>(<span class="st">"2000-02-29 14:00:00"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29 14:00:00 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mdy_hm</span>(<span class="st">"02-29-2000 10.04"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29 10:04:00 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dmy_h</span>(<span class="st">"29.02.2000 10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29 10:00:00 UTC"</code></pre>
+</div>
+</div>
+</section>
+<section id="further-handy-things" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="further-handy-things"><span class="header-section-number">4.6</span> Further handy things</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2022-11-21"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2022-11-21 16:09:41 CET"</code></pre>
+</div>
+</div>
+</section>
+<section id="manipulating-dates" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="manipulating-dates"><span class="header-section-number">4.7</span> Manipulating dates</h2>
+<section id="components" class="level3" data-number="4.7.1">
+<h3 data-number="4.7.1" class="anchored" data-anchor-id="components"><span class="header-section-number">4.7.1</span> Components</h3>
+<p>You can also extract singular components from dates using the following functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>example_datetime <span class="ot">&lt;-</span> <span class="fu">ymd_hms</span>(<span class="st">"2000-02-29 14:00:00"</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">year</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">month</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">day</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 29</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hour</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">minute</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">second</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">week</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quarter</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">semester</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">am</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pm</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">leap_year</span>(example_datetime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+</section>
+<section id="rounding" class="level3" data-number="4.7.2">
+<h3 data-number="4.7.2" class="anchored" data-anchor-id="rounding"><span class="header-section-number">4.7.2</span> Rounding</h3>
+<p>Sometimes you will also want to round dates – e.g., if you count observations per month or something similar.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">floor_date</span>(example_datetime, <span class="at">unit =</span> <span class="st">"month"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-01 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">floor_date</span>(example_datetime, <span class="at">unit =</span> <span class="st">"3 months"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-01-01 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round_date</span>(example_datetime, <span class="at">unit =</span> <span class="st">"year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-01-01 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ceiling_date</span>(example_datetime, <span class="at">unit =</span> <span class="st">"day"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-03-01 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rollback</span>(example_datetime, <span class="at">roll_to_first =</span> <span class="cn">FALSE</span>, <span class="at">preserve_hms =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-01-31 14:00:00 UTC"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rollback</span>(example_datetime, <span class="at">roll_to_first =</span> <span class="cn">TRUE</span>, <span class="at">preserve_hms =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-01 UTC"</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="time-zones" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="time-zones"><span class="header-section-number">4.8</span> Time zones</h2>
+<p>Dealing with time zones is tedious. By default, R sets the time zone of every date you provide it with to UTC (Coordinated Universal Time). However, sometimes you need to change it – e.g., when you deal with flight data. <code>lubridate</code> provides you with some handy functions for doing so. Generally speaking, you will not often work with them.</p>
+<p>First, you need to know which arguments you can provide the functions with – or, put differently, the names of the time zones.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">OlsonNames</span>()) <span class="co"># wrapped it with head() because it's 593 in total</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Africa/Abidjan"     "Africa/Accra"       "Africa/Addis_Ababa"
+[4] "Africa/Algiers"     "Africa/Asmara"      "Africa/Asmera"     </code></pre>
+</div>
+</div>
+<p>If you want to set a new time zone to a date-object – hence, 2 o’clock UTC becomes 2 o’clock CET – use <code>force_tz()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">force_tz</span>(example_datetime, <span class="at">tzone =</span> <span class="st">"CET"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2000-02-29 14:00:00 CET"</code></pre>
+</div>
+</div>
+<p>If you want to transform your date-time object to a new time zone, preserving its time – for example, for appointments all around the world – use <code>with_tz()</code>. If you use the aforementioned <code>now()</code> function, <code>lubridate</code> will use your computer’s time zone:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tz</span>(<span class="fu">now</span>(), <span class="at">tzone =</span> <span class="st">"US/Eastern"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2022-11-21 10:09:41 EST"</code></pre>
+</div>
+</div>
+</section>
+<section id="periods-durations-intervals" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="periods-durations-intervals"><span class="header-section-number">4.9</span> Periods, durations, intervals</h2>
+<p>You will also want to do some calculations based on the dates and times you have parsed.</p>
+<section id="periods" class="level3" data-number="4.9.1">
+<h3 data-number="4.9.1" class="anchored" data-anchor-id="periods"><span class="header-section-number">4.9.1</span> Periods</h3>
+<p>A period can be created using a pluralized name of a time unit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">months</span>(<span class="dv">3</span>) <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "3m 5d 0H 0M 0S"</code></pre>
+</div>
+</div>
+<p>Another way of doing so – which is suited for automation – is <code>period()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">period</span>(<span class="at">num =</span> <span class="dv">5</span>, <span class="at">unit =</span> <span class="st">"years"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "5y 0m 0d 0H 0M 0S"</code></pre>
+</div>
+</div>
+<p>You can also set multiple arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">period</span>(<span class="at">num =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">units =</span> <span class="fu">c</span>(<span class="st">"years"</span>, <span class="st">"months"</span>, <span class="st">"days"</span>, <span class="st">"hours"</span>, <span class="st">"minutes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "1y 2m 3d 4H 5M 0S"</code></pre>
+</div>
+</div>
+</section>
+<section id="durations" class="level3" data-number="4.9.2">
+<h3 data-number="4.9.2" class="anchored" data-anchor-id="durations"><span class="header-section-number">4.9.2</span> Durations</h3>
+<p>Durations can be used to model physical processes. They are stored in seconds and can be created by prefixing the name of a period:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dweeks</span>(<span class="at">x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "604800s (~1 weeks)"</code></pre>
+</div>
+</div>
+<p>Again, there’s a constructor function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">duration</span>(<span class="at">num =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">units =</span> <span class="fu">c</span>(<span class="st">"years"</span>, <span class="st">"months"</span>, <span class="st">"days"</span>, <span class="st">"hours"</span>, <span class="st">"minutes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "31557600s (~1 years)"  "5259600s (~8.7 weeks)" "259200s (~3 days)"    
+[4] "14400s (~4 hours)"     "300s (~5 minutes)"    </code></pre>
+</div>
+</div>
+<p>How long do I have to wait until Christmas?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"2022-12-24"</span>)<span class="sc">-</span><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Time difference of 33 days</code></pre>
+</div>
+</div>
+</section>
+<section id="intervals" class="level3" data-number="4.9.3">
+<h3 data-number="4.9.3" class="anchored" data-anchor-id="intervals"><span class="header-section-number">4.9.3</span> Intervals</h3>
+<p>Intervals can be created by using the <code>interval()</code> function or by using the <code>%--%</code> operator.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">interval</span>(<span class="fu">today</span>(), <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2022-11-21 UTC--2020-12-24 UTC</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>() <span class="sc">%--%</span> <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2022-11-21 UTC--2020-12-24 UTC</code></pre>
+</div>
+</div>
+<p>You can divide an interval by a duration to determine its physical length:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>christmas <span class="ot">&lt;-</span> <span class="fu">today</span>() <span class="sc">%--%</span> <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>)</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>christmas<span class="sc">/</span><span class="fu">ddays</span>(<span class="at">x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -697</code></pre>
+</div>
+</div>
+<p>You can divide an interval by a period to determine its implied length in clock time:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a>christmas<span class="sc">/</span><span class="fu">days</span>(<span class="at">x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -697</code></pre>
+</div>
+</div>
+<p>If you want to know its length in seconds, you can also do <code>int_length()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int_length</span>(christmas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -60220800</code></pre>
+</div>
+</div>
+<p>There are also some other things you can do with intervals:</p>
+<p>Does the start of the winter semester fall within the period between now and Christmas?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"2020-11-04"</span>) <span class="sc">%within%</span> <span class="fu">interval</span>(<span class="fu">today</span>(), <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+</div>
+<p>Reverse the direction of the interval:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int_flip</span>(<span class="fu">interval</span>(<span class="fu">today</span>(), <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2020-12-24 UTC--2022-11-21 UTC</code></pre>
+</div>
+</div>
+<p>You can also shift an interval:</p>
+<p>today until Christmas –&gt; tomorrow until December 25:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int_shift</span>(christmas, <span class="at">by =</span> <span class="fu">days</span>(<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2022-11-22 UTC--2020-12-25 UTC</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="further-links-1" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="further-links-1"><span class="header-section-number">4.10</span> Further links</h2>
+<ul>
+<li>The <a href="https://lubridate.tidyverse.org">lubridate page</a> which also contains a cheatsheet</li>
+<li>The <a href="https://r4ds.had.co.nz/dates-and-times.html">R4DS chapter</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./dplyr.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ggplot2.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

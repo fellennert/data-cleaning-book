@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Data cleaning for social scientists - 2&nbsp; Tidy data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./dplyr.html" rel="next">
+<link href="./projects_readr.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data cleaning for social scientists</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./projects_readr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tidy-data.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./dplyr.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./forcats_lubridate.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Factors with <code>forcats</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ggplot2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Visualizations with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-concept-of-tidy-data" id="toc-the-concept-of-tidy-data" class="nav-link active" data-scroll-target="#the-concept-of-tidy-data"><span class="toc-section-number">3</span>  The concept of <em>tidy data</em></a></li>
+  <li><a href="#making-messy-data-tidy" id="toc-making-messy-data-tidy" class="nav-link" data-scroll-target="#making-messy-data-tidy"><span class="toc-section-number">4</span>  Making messy data tidy</a>
+  <ul class="collapse">
+  <li><a href="#column-headers-are-values" id="toc-column-headers-are-values" class="nav-link" data-scroll-target="#column-headers-are-values"><span class="toc-section-number">4.1</span>  Column headers are values</a></li>
+  <li><a href="#variables-in-both-rows-and-columns" id="toc-variables-in-both-rows-and-columns" class="nav-link" data-scroll-target="#variables-in-both-rows-and-columns"><span class="toc-section-number">4.2</span>  Variables in both rows and columns</a></li>
+  <li><a href="#multiple-variables-in-one-column" id="toc-multiple-variables-in-one-column" class="nav-link" data-scroll-target="#multiple-variables-in-one-column"><span class="toc-section-number">4.3</span>  Multiple variables in one column</a>
+  <ul class="collapse">
+  <li><a href="#insertion-the-pipe" id="toc-insertion-the-pipe" class="nav-link" data-scroll-target="#insertion-the-pipe"><span class="toc-section-number">4.3.1</span>  Insertion: the pipe</a></li>
+  </ul></li>
+  <li><a href="#further-functionalities" id="toc-further-functionalities" class="nav-link" data-scroll-target="#further-functionalities"><span class="toc-section-number">4.4</span>  Further functionalities</a>
+  <ul class="collapse">
+  <li><a href="#splitting-and-merging-cells" id="toc-splitting-and-merging-cells" class="nav-link" data-scroll-target="#splitting-and-merging-cells"><span class="toc-section-number">4.4.1</span>  Splitting and merging cells</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#further-links" id="toc-further-links" class="nav-link" data-scroll-target="#further-links"><span class="toc-section-number">5</span>  Further links</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">6</span>  References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Tidy data</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Before you learn how to tidy and wrangle data, you need to know how you want your data set to actually look like, i.e., what the desired outcome of the entire process of tidying your data set is. The <code>tidyverse</code> is a collection of packages which share an underlying philosophy: they are tidy. This means, that they (preferably) take tidy data as inputs and output tidy data. In the following, I will, first, introduce you to the concept of tidy data as developed by Hadley Wickham <span class="citation" data-cites="wickham2014">(<a href="references.html#ref-wickham2014" role="doc-biblioref">Wickham 2014</a>)</span>. Second, <code>tidyr</code> is introduced <span class="citation" data-cites="wickham2020b">(<a href="references.html#ref-wickham2020b" role="doc-biblioref"><strong>wickham2020b?</strong></a>)</span>. Its goal is to provide you with functions that facilitate tidying data sets. Beyond, I will provide you some examples of how to create tibbles using functions from the <code>tibble</code> package <span class="citation" data-cites="muller2020">(<a href="references.html#ref-muller2020" role="doc-biblioref"><strong>muller2020?</strong></a>)</span>. Moreover, the pipe from the <code>magrittr</code> package is introduced.</p>
+<p>Please note that tidying and cleaning data are not equivalent: I refer to tidying data as to bringing data in a tidy format. Cleaning data, however, can encompass way more than this: parsing columns in the right format (using <code>readr</code>, for instance), imputation of missing values, address the problem of typos, etc.</p>
+<section id="the-concept-of-tidy-data" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> The concept of <em>tidy data</em></h1>
+<p>data sets can be structured in many ways. To make them tidy, they must be organized in the following way (this is taken from the R for Data Science book <span class="citation" data-cites="wickham2016a">(<a href="references.html#ref-wickham2016a" role="doc-biblioref"><strong>wickham2016a?</strong></a>)</span>):</p>
+<ol type="1">
+<li>Each variable must have its own column.<br>
+</li>
+<li>Each observation must have its own row.<br>
+</li>
+<li>Each value must have its own cell.</li>
+</ol>
+<p>They can even be boiled further down:</p>
+<ol type="1">
+<li>Put each data set in a tibble.</li>
+<li>Put each variable in a column.</li>
+</ol>
+<p>This can also be visually depicted:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/tidy_data.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The three rules that make a data set tidy (taken from Wickham and Grolemund 2016: 149)</figcaption><p></p>
+</figure>
+</div>
+<p>This way of storing data has two big advantages:</p>
+<ul>
+<li>you can easily access, and hence manipulate, variables as vectors</li>
+<li>if you perform vectorized operations on the tibble, cases are preserved.</li>
+</ul>
+</section>
+<section id="making-messy-data-tidy" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Making messy data tidy</h1>
+<p>So what are the most common problems with data sets? The following list is taken from the <code>tidyr</code> vignette<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<ul>
+<li>Column headers are values, not variable names.<br>
+</li>
+<li>Variables are stored in both rows and columns.<br>
+</li>
+<li>Multiple variables are stored in one column.<br>
+</li>
+<li>Multiple types of observational units are stored in the same table.<br>
+</li>
+<li>A single observational unit is stored in multiple tables.</li>
+</ul>
+<p>I will go across the former three types of problems, because the latter two require some more advanced data wrangling techniques you haven’t learned yet (i.e., functions from the <code>dplyr</code> package: <code>select()</code>, <code>mutate()</code>, <code>left_join()</code>, among others).</p>
+<p>In the following, I will provide you with examples on how this might look like and how you can address the respective problem using functions from the <code>tidyr</code> package. This will serve as an introduction to the two most important functions of the <code>tidyr</code> package: <code>pivot_longer()</code> and its counterpart <code>pivot_wider()</code>. Beyond that, <code>separate()</code> will be introduced as well. At the beginning of every part, I will build the tibble using functions from the tibble package. This should suffice as a quick refresher for and introduction to creating tibbles.</p>
+<p><code>tidyr</code> has some more functions in stock. They do not necessarily relate to transforming messy data sets into tidy ones, but also serve you well for some general cleaning tasks. They will be introduced, too.</p>
+<section id="column-headers-are-values" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="column-headers-are-values"><span class="header-section-number">4.1</span> Column headers are values</h2>
+<p>A data set of this form would look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+✔ ggplot2 3.3.6      ✔ purrr   0.3.5 
+✔ tibble  3.1.8      ✔ dplyr   1.0.10
+✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+✔ readr   2.1.3      ✔ forcats 0.5.2 
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tibble_value_headers <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">manufacturer =</span> <span class="fu">c</span>(<span class="st">"Audi"</span>, <span class="st">"BMW"</span>, <span class="st">"Mercedes"</span>, <span class="st">"Opel"</span>, <span class="st">"VW"</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">3 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">4 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">50</span><span class="sc">:</span><span class="dv">100</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">5 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">6 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">30</span><span class="sc">:</span><span class="dv">50</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">8 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">20</span><span class="sc">:</span><span class="dv">40</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">10 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">12 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">20</span>, <span class="dv">5</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">16 cyl</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>tibble_value_headers</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 9
+  manufacturer `3 cyl` `4 cyl` `5 cyl` `6 cyl` `8 cyl` `10 cyl` `12 cyl` 16 cy…¹
+  &lt;chr&gt;          &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;
+1 Audi               8      66       7      41      36        6       14       0
+2 BMW                1      79       2      41      25        5       19       0
+3 Mercedes          17      66       4      47      29       10       14       0
+4 Opel              13      88       7      42      28        8        2       0
+5 VW                12      53       4      47      31        3       11       0
+# … with abbreviated variable name ¹​`16 cyl`</code></pre>
+</div>
+</div>
+<p>You can create a tibble <em>by column</em> using the <code>tibble</code> function. Column names need to be specified and linked to vectors of either the same length or length one.</p>
+<p>This data set basically consists of three variables: <code>German car manufacturer</code>, <code>number of cylinders</code>, and <code>frequency</code>. To make the data set tidy, it has to consist of three columns depicting the three respective variables. This operation is called pivoting the non-variable columns into two-column key-value pairs. As the data set will thereafter contain fewer columns and more rows than before, it will have become longer (or taller). Hence, the tidyr function is called <code>pivot_longer()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer <span class="ot">&lt;-</span> tibble_value_headers <span class="sc">|&gt;</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>manufacturer, <span class="at">names_to =</span> <span class="st">"cylinders"</span>, <span class="at">values_to =</span> <span class="st">"frequency"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 3
+   manufacturer cylinders frequency
+   &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;
+ 1 Audi         3 cyl             8
+ 2 Audi         4 cyl            66
+ 3 Audi         5 cyl             7
+ 4 Audi         6 cyl            41
+ 5 Audi         8 cyl            36
+ 6 Audi         10 cyl            6
+ 7 Audi         12 cyl           14
+ 8 Audi         16 cyl            0
+ 9 BMW          3 cyl             1
+10 BMW          4 cyl            79
+# … with 30 more rows</code></pre>
+</div>
+</div>
+<p>In the function call, you need to specify the following: if you were not to use the pipe, the first argument would be the tibble you are manipulating. Then, you look at the column you want to <strong>keep</strong>. Here, it is the car manufacturer. This means that all columns but <code>manufacturer</code> will be crammed into two new ones: one will contain the columns’ names, the other one their values. How are those new column supposed to be named? That can be specified in the <code>names_to =</code> and <code>values_to =</code>arguments. Please note that you need to provide them a character vector, hence, surround your parameters with quotation marks. As a rule of thumb for all <code>tidyverse</code> packages: If it is a new column name you provide, surround it with quotation marks. If it is one that already exists – like, here, manufacturer, then you do not need the quotation marks.</p>
+</section>
+<section id="variables-in-both-rows-and-columns" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="variables-in-both-rows-and-columns"><span class="header-section-number">4.2</span> Variables in both rows and columns</h2>
+<p>You have this data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>car_models_fuel <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>manufacturer, <span class="sc">~</span>model, <span class="sc">~</span>cylinders, <span class="sc">~</span>fuel_consumption_type, <span class="sc">~</span>fuel_consumption_per_100km,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VW"</span>, <span class="st">"Golf"</span>, <span class="dv">4</span>, <span class="st">"urban"</span>, <span class="fl">5.2</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VW"</span>, <span class="st">"Golf"</span>, <span class="dv">4</span>, <span class="st">"extra urban"</span>, <span class="fl">4.5</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Opel"</span>, <span class="st">"Adam"</span>, <span class="dv">4</span>, <span class="st">"urban"</span>, <span class="fl">4.9</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Opel"</span>, <span class="st">"Adam"</span>, <span class="dv">4</span>, <span class="st">"extra urban"</span>, <span class="fl">4.1</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>car_models_fuel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  manufacturer model cylinders fuel_consumption_type fuel_consumption_per_100km
+  &lt;chr&gt;        &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;                                      &lt;dbl&gt;
+1 VW           Golf          4 urban                                        5.2
+2 VW           Golf          4 extra urban                                  4.5
+3 Opel         Adam          4 urban                                        4.9
+4 Opel         Adam          4 extra urban                                  4.1</code></pre>
+</div>
+</div>
+<p>It was created using the <code>tribble</code> function: tibbles can also be created <em>by row</em>. First, the column names need to be specified by putting a tilde (<code>~</code>) in front of them. Then, you can put in values separated by commas. Please note that the number of values needs to be a multiple of the number of columns.</p>
+<p>In this data set, there are basically five variables: manufacturer, model, cylinders, urban fuel consumption, and extra urban fuel consumption. However, the column <code>fuel_consumption_type</code> does not store a variable but the names of two variables. Hence, you need to fix this to make the data set tidy. Because this encompasses reducing the number of rows, the data set becomes wider. The function to achieve this is therefore called <code>pivot_wider()</code> and the inverse of <code>pivot_longer()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>car_models_fuel_tidy <span class="ot">&lt;-</span> car_models_fuel <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_from =</span> fuel_consumption_type, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_from =</span> fuel_consumption_per_100km</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>car_models_fuel_tidy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  manufacturer model cylinders urban `extra urban`
+  &lt;chr&gt;        &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;
+1 VW           Golf          4   5.2           4.5
+2 Opel         Adam          4   4.9           4.1</code></pre>
+</div>
+</div>
+<p>Here, you only need to specify the columns you fetch the names and values from. As they both do already exist, you do not need to wrap them in quotation marks.</p>
+</section>
+<section id="multiple-variables-in-one-column" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="multiple-variables-in-one-column"><span class="header-section-number">4.3</span> Multiple variables in one column</h2>
+<p>Now, however, there is a problem with the cylinders: their number should be depicted in a numeric vector. We could achieve this by either parsing it to a numeric vector:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(ger_car_manufacturer_longer<span class="sc">$</span>cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  3  4  5  6  8 10 12 16  3  4  5  6  8 10 12 16  3  4  5  6  8 10 12 16  3
+[26]  4  5  6  8 10 12 16  3  4  5  6  8 10 12 16</code></pre>
+</div>
+</div>
+<p>On the other hand, we can also use a handy function from <code>tidyr</code> called <code>separate()</code> and afterwards drop the unnecessary column:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="ot">&lt;-</span> ger_car_manufacturer_longer <span class="sc">|&gt;</span> <span class="co"># first, take the tibble</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(cylinders, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"cylinders"</span>, <span class="st">"drop_it"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span> <span class="co"># and then split the column "cylinders" into two</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drop_it) <span class="co"># you will learn about this in the lesson on dplyr  # and then drop one column from the tibble</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If there are two (or actually more) relevant values in one column, you can simply let out the dropping process and easily split them into multiple columns. By default, the <code>sep =</code> argument divides the content by all non-alphanumeric characters (every character that is not a letter, number, or space) it contains.</p>
+<p>Please note that the new column is still in character format. We can change this using <code>as.numeric()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl<span class="sc">$</span>cylinders <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(ger_car_manufacturer_longer_sep_cyl<span class="sc">$</span>cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Furthermore, you might want to sort your data in a different manner. If you want to do this by cylinders, it would look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(ger_car_manufacturer_longer_sep_cyl, cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 3
+   manufacturer cylinders frequency
+   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Audi                 3         8
+ 2 BMW                  3         1
+ 3 Mercedes             3        17
+ 4 Opel                 3        13
+ 5 VW                   3        12
+ 6 Audi                 4        66
+ 7 BMW                  4        79
+ 8 Mercedes             4        66
+ 9 Opel                 4        88
+10 VW                   4        53
+# … with 30 more rows</code></pre>
+</div>
+</div>
+<section id="insertion-the-pipe" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="insertion-the-pipe"><span class="header-section-number">4.3.1</span> Insertion: the pipe</h3>
+<p>Have you noticed the <code>|&gt;</code>? That’s the pipe. It can be considered a conjunction in coding. Usually, you will use it when working with tibbles. What it does is pretty straight-forward: it takes what is on its left – the input – and provides it to the function on its right as the first argument. Hence, the code in the last chunk, which looks like this</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(ger_car_manufacturer_longer_sep_cyl, cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 3
+   manufacturer cylinders frequency
+   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Audi                 3         8
+ 2 BMW                  3         1
+ 3 Mercedes             3        17
+ 4 Opel                 3        13
+ 5 VW                   3        12
+ 6 Audi                 4        66
+ 7 BMW                  4        79
+ 8 Mercedes             4        66
+ 9 Opel                 4        88
+10 VW                   4        53
+# … with 30 more rows</code></pre>
+</div>
+</div>
+<p>could have also been written like this</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="sc">|&gt;</span> <span class="fu">arrange</span>(cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 3
+   manufacturer cylinders frequency
+   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+ 1 Audi                 3         8
+ 2 BMW                  3         1
+ 3 Mercedes             3        17
+ 4 Opel                 3        13
+ 5 VW                   3        12
+ 6 Audi                 4        66
+ 7 BMW                  4        79
+ 8 Mercedes             4        66
+ 9 Opel                 4        88
+10 VW                   4        53
+# … with 30 more rows</code></pre>
+</div>
+</div>
+<p>because the tibble is the first argument in the function call.</p>
+<p>Because the pipe (its precedessor was <code>%&gt;%</code>) has really gained traction in the R community, many functions are now optimized for being used with the pipe. However, there are still some around which are not. A function for fitting a basic linear model with one dependent and one independent variable which are both stored in a tibble looks like this: <code>lm(formula = dv ~ iv, data = tibble)</code>. Here, the tibble is not the first argument. To be able to fit a linear model in a “pipeline,” you need to employ a little hack: you can use an underscore <code>_</code> as a placeholder. Here, it is important that the argument is named.</p>
+<p>Let’s check out the effect the number of cylinders has on the number of models:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(frequency <span class="sc">~</span> cylinders, <span class="at">data =</span> _) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = frequency ~ cylinders, data = ger_car_manufacturer_longer_sep_cyl)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-34.679 -14.974  -0.504  13.438  55.027 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  43.7964     7.2138   6.071 4.55e-07 ***
+cylinders    -2.7058     0.8003  -3.381  0.00168 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 21.02 on 38 degrees of freedom
+Multiple R-squared:  0.2313,    Adjusted R-squared:  0.211 
+F-statistic: 11.43 on 1 and 38 DF,  p-value: 0.001684</code></pre>
+</div>
+</div>
+<p>As <code>|&gt;</code> is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.</p>
+</section>
+</section>
+<section id="further-functionalities" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="further-functionalities"><span class="header-section-number">4.4</span> Further functionalities</h2>
+<section id="splitting-and-merging-cells" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="splitting-and-merging-cells"><span class="header-section-number">4.4.1</span> Splitting and merging cells</h3>
+<p>If there are multiple values in one column/cell and you want to split them and put them into two rows instead of columns, <code>tidyr</code> offers you the <code>separate_rows()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>german_cars_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">Audi =</span> <span class="st">"A1, A3, A4, A5, A6, A7, A8"</span>, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">BMW =</span> <span class="st">"1 Series, 2 Series, 3 Series, 4 Series, 5 Series, 6 Series, 7 Series, 8 Series"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>german_cars_tbl <span class="ot">&lt;-</span> <span class="fu">enframe</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  german_cars_vec, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"brand"</span>, </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="st">"model"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>german_cars_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  brand model                                                                   
+  &lt;chr&gt; &lt;chr&gt;                                                                   
+1 Audi  A1, A3, A4, A5, A6, A7, A8                                              
+2 BMW   1 Series, 2 Series, 3 Series, 4 Series, 5 Series, 6 Series, 7 Series, 8…</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tidy_german_cars_tbl <span class="ot">&lt;-</span> german_cars_tbl <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(model, <span class="at">sep =</span> <span class="st">", "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>enframe()</code> enables you to create a tibble from a (named) vector. It outputs a tibble with two columns (<code>name</code> and <code>value</code> by default): <code>name</code> contains the names of the elements (if the elements are unnamed, it contains a serial number), <code>value</code> the element. Both can be renamed in the function call by providing a character vector.</p>
+<p>If you want to achieve the opposite, i.e., merge cells’ content, you can use the counterpart, <code>unite()</code>. Let’s take the following dataframe which consists of the names of the professors of the Institute for Political Science of the University of Regensburg:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>professor_names_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">first_name =</span> <span class="fu">c</span>(<span class="st">"Karlfriedrich"</span>, <span class="st">"Martin"</span>, <span class="st">"Jerzy"</span>, <span class="st">"Stephan"</span>, <span class="st">"Melanie"</span>),</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">last_name =</span> <span class="fu">c</span>(<span class="st">"Herb"</span>, <span class="st">"Sebaldt"</span>, <span class="st">"Maćków"</span>, <span class="st">"Bierling"</span>, <span class="st">"Walter-Rogg"</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>professor_names_tbl <span class="ot">&lt;-</span> professor_names_df <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(first_name, last_name, <span class="at">col =</span> <span class="st">"name"</span>, <span class="at">sep =</span> <span class="st">" "</span>, <span class="at">remove =</span> <span class="cn">TRUE</span>, <span class="at">na.rm =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>professor_names_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 1
+  name               
+  &lt;chr&gt;              
+1 Karlfriedrich Herb 
+2 Martin Sebaldt     
+3 Jerzy Maćków       
+4 Stephan Bierling   
+5 Melanie Walter-Rogg</code></pre>
+</div>
+</div>
+<p><code>unite()</code> takes the tibble it should be applied to as the first argument (not necessary if you use the pipe). Then, it takes the two or more columns as arguments (actually, this is not necessary if you want to unite all columns). <code>col =</code> takes a character vector to specify the name of the resulting, new column. <code>remove = TRUE</code> indicates that the columns that are united are removed as well. You can, of course, set it to false, too. <code>na.rm = FALSE</code> finally indicates that missing values are not to be removed prior to the uniting process.</p>
+<p>Here, the final variant of creating tibbles is introduced as well: you can apply the function <code>as_tibble()</code> to a data frame and it will then be transformed into a tibble.</p>
+</section>
+</section>
+</section>
+<section id="further-links" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Further links</h1>
+<ul>
+<li>Hadley on <a href="https://vita.had.co.nz/papers/tidy-data.pdf">tidy data</a><br>
+</li>
+<li>The two <code>pivot_*()</code> functions lie at the heart of <code>tidyr</code>. <a href="https://www.storybench.org/pivoting-data-from-columns-to-rows-and-back-in-the-tidyverse/">This article</a> from the Northeastern University’s School of Journalism explains it in further detail.</li>
+</ul>
+</section>
+<section id="references" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> References</h1>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-wickham2014" class="csl-entry" role="doc-biblioentry">
+Wickham, Hadley. 2014. <span>“Tidy Data.”</span> <em>Journal of Statistical Software</em> 59 (10). <a href="https://doi.org/10.18637/jss.v059.i10">https://doi.org/10.18637/jss.v059.i10</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>which can be found <a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html">here</a> or using <code>vignette("tidy-data", package = "tidyr")</code><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./projects_readr.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to RStudio Projects and <code>readr</code></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./dplyr.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulation with <code>dplyr</code></span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

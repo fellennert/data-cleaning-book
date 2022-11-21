@@ -7,8 +7,11 @@ book:
   date: "last update: `r lubridate::today()`"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    - projects_readr.qmd
+    - tidy-data.qmd
+    - dplyr.qmd
+    - forcats_lubridate.qmd
+    - ggplot2.qmd
     - references.qmd
 
 bibliography: references.bib
