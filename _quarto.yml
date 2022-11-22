@@ -14,6 +14,7 @@ book:
     - forcats.qmd
     - lubridate.qmd
     - ggplot2.qmd
+    - exercises.qmd
     - references.qmd
 
 bibliography: references.bib

@@ -1,0 +1,357 @@
+# Exercises
+
+Here, you can find a bunch of exercises you may use to practice the things that were covered during the workshop.
+
+## Read and tidy data
+
+First, download and extract [the zip file](https://www.dropbox.com/s/ptnot75sed1lupx/training-files.zip?dl=1) by clicking the link. Then...
+
+Read them in using the right functions. Specify the parameters properly. Hints can be found in hints.md. Each file should be stored in an object, names should correspond to the file names.
+
+Bring the data sets into a tidy format. Store the tidy data sets in a new object, named like the former object plus the suffix "\_tidy" -- e.g., `books_tidy`. If no tidying is needed, you do not have to create a new object. The pipe operator should be used to connect the different steps.
+
+Note: this is challenging, absolutely. If you have problems, try to google the different functions and think about what the different parameters indicate. If that is to no avail, send me an e-mail. I am very happy to provide you further assistance.
+
+<details>
+
+<summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+library(tidyverse)
+library(readxl)
+
+#read-in
+#books
+books <- read_tsv("books.tsv")
+books <- read_delim("books.txt", delim = "|") #alternatively
+
+#ches
+ches_2017_tidy <- read_csv("ches_2017.csv")
+ches_2017_modified <- read_csv("ches_2017_modified.csv", skip = 4)
+
+#publishers
+publishers1 <- read_excel("publishers.xlsx", sheet = "publishers_a-l") 
+publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") %>% 
+  rename(city = place)
+
+#spotify
+spotify2018 <- read_csv("spotify2018.csv")
+
+#tidying
+#books
+books_tidy <- read_delim("books.txt", delim = "|") %>% 
+  separate(col = "author", into= c("author_1", "author_2"), sep = " and ")
+books_tidy_rows <- read_delim("books.txt", delim = "|") %>% 
+  separate_rows(author, sep = c(" and "))
+
+# There also is " with " as a potential separator -- separate() only takes a sep argument of length 1. You could replace " with " with " and " beforehand using `str_replace_all` -- but more on this in Chapter 6
+
+books_really_tidy_rows <- read_delim("books.txt", delim = "|") %>% 
+  mutate(author = str_replace_all(author, pattern = c(" with " = " and "))) %>% 
+  separate_rows(author, sep = c(" and "))
+
+#ches
+ches_2017_tidy <- read_csv("ches_2017.csv")
+ches_2017_modified_tidy <- read_csv("ches_2017_modified.csv", skip = 4) %>%
+  pivot_wider(names_from = variable)
+
+#publishers
+publishers1 <- read_excel("publishers.xlsx", sheet = "publishers_a-l") 
+publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") %>% 
+  rename(city = place)
+
+publishers_tidy <- bind_rows(publishers1, publishers2) %>% 
+  separate(col = city, into = c("city", "state"), sep=", ")
+
+#spotify
+spotify2018 <- read_csv("spotify2018.csv")
+```
+
+</details>
+
+## Reshaping with `dplyr`
+
+Open the [IMDb file](https://www.dropbox.com/s/81o3zzdkw737vt0/imdb2006-2016.csv?dl=1) (click to download).
+
+1.  Find the duplicated movie. How could you go across this?
+2.  Which director has made the longest movie?
+3.  What's the highest ranked movie?
+4.  Which movie got the most votes?
+5.  Which movie had the biggest revenue in 2016?
+6.  How much revenue did the movies in the data set make each year in total?
+7.  Filter movies following some conditions:
+    a.  More runtime than the average runtime (hint: you could also use `mutate()` before).
+    b.  Movies directed by J. J. Abrams.
+    c.  More votes than the median of all of the votes.
+    d.  The movies which have the most common value (the mode) in terms of rating (`mode()` does exist but will not work in the way you might like it to work -- run the script below and use the `my_mode` function).
+
+```{r eval=FALSE}
+## helper function for mode
+
+my_mode <- function(x){ 
+    ta = table(x)
+    tam = max(ta)
+    if (all(ta == tam))
+         mod = NA
+    else
+         if(is.numeric(x))
+    mod = as.numeric(names(ta)[ta == tam])
+    else
+         mod = names(ta)[ta == tam]
+    return(mod)
+}
+
+```
+
+<details>
+
+<summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+imdb <- read_csv("imdb2006-2016.csv")
+
+#1 
+imdb %>% count(Title) %>% arrange(-n)
+
+#2
+imdb %>% 
+  arrange(-`Runtime (Minutes)`) %>% 
+  slice(1) %>% 
+  select(Director)
+
+#3
+imdb %>% 
+  arrange(Rank) %>% 
+  slice(1) %>% 
+  select(Title)
+
+#4
+imdb %>% 
+  arrange(-Votes) %>% 
+  slice(1) %>% 
+  select(Title)
+
+#5
+imdb %>% 
+  filter(Year == 2016) %>% 
+  arrange(-`Revenue (Millions)`) %>% 
+  slice(1) %>% 
+  select(Title)
+
+#6
+imdb %>% 
+  filter(!is.na(`Revenue (Millions)`)) %>% 
+  group_by(Year) %>% 
+  summarize(total_revenue = sum(`Revenue (Millions)`))
+
+#7a
+imdb %>% 
+  filter(`Runtime (Minutes)` > mean(`Runtime (Minutes)`))
+
+#7b
+imdb %>% 
+  filter(Director == "J.J. Abrams")
+
+#7c
+imdb %>% 
+  filter(Votes > median(Votes))
+
+#7d
+## helper function for mode
+my_mode <- function(x){ 
+    ta = table(x)
+    tam = max(ta)
+    if (all(ta == tam))
+         mod = NA
+    else
+         if(is.numeric(x))
+    mod = as.numeric(names(ta)[ta == tam])
+    else
+         mod = names(ta)[ta == tam]
+    return(mod)
+}
+
+imdb %>% 
+  filter(Rating == my_mode(Rating))
+```
+
+</details>
+
+## Factors with `forcats`
+
+For now, I will not include too many exercises in here. However, you will have to work with factors extensively when we come to data visualization.
+
+Read in the [ESS file](https://www.dropbox.com/s/c9llcbln6jui1t8/ess2016_ger.csv?dl=0).
+
+1.  Convert the variable `party_vote` into a factor variable called `party_code_fct`. Drop all other variables.
+2.  Look at the distribution of the parties; keep the 4 most common ones, all others should be coded to `Other`. Do it using the following three functions. Which of them was the best for the job?
+    a)  using `fct_recode()`
+    b)  using `fct_collapse()`
+    c)  using `fct_lump()`
+3.  Reorder the factor levels according to their number of occurrence.
+
+<details>
+
+<summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+#read file
+ess_2016 <- read_csv("ess2016_ger.csv")
+
+#1 
+ess_w_factor <- ess_2016 %>% 
+  mutate(party_code_fct = as_factor(party_vote)) %>% 
+  select(party_code_fct)
+
+#2
+ess_w_factor %>% 
+  count(party_code_fct) %>% 
+  filter(!is.na(party_code_fct)) %>% 
+  arrange(-n)
+
+#2a
+ess_recoded <- ess_w_factor %>% 
+  mutate(party_code_fct = fct_recode(party_code_fct,
+                                     Other = "AfD",
+                                     Other = "FDP",
+                                     Other = "Andere Partei",
+                                     Other = "Piratenpartei",
+                                     Other = "NPD"))
+
+# levels(ess_recoded$party_code_fct) # for validating that it has worked
+
+#2b
+ess_collapsed <- ess_w_factor %>% 
+  mutate(party_code_fct = fct_collapse(party_code_fct,
+                                       Other = c("AfD", "FDP", "Andere Partei", "Piratenpartei", "NPD")))
+
+# levels(ess_collapsed$party_code_fct) # for validating that it has worked
+
+#2c
+ess_lumped <- ess_w_factor %>% 
+  mutate(party_code_fct = fct_lump(party_code_fct, n = 4))
+
+# levels(ess_collapsed$party_code_fct) # for validating that it has worked
+
+#3
+ess_ordered <- ess_w_factor %>% 
+  count(party_code_fct) %>% 
+  mutate(party_code_fct = fct_reorder(party_code_fct, n))
+
+# levels(ess_ordered$party_code_fct) # for validating that it has worked
+```
+
+</details>
+
+## Dates with `lubridate`
+
+The following function shall give you around 1000 of the latest tweets by Emmanuel Macron's official Twitter account (you might consider storing them in a csv_file after downloading them). Note that you need to have a Twitter account and grant access. If you do not have a Twitter account/do not want to grant access, you can use [this data set I have prepared for you](https://www.dropbox.com/s/3ijeugdbqsrowe8/macron_timeline_221122.csv?dl=1).
+
+```{r eval=FALSE, include=TRUE}
+# install.packages("rtweet")
+library(rtweet)
+
+#macron_timeline <- get_timeline(user = "@EmmanuelMacron", n = 1000)
+
+#write_csv(macron_timeline, "macron_timeline_221122.csv")
+```
+
+Let's focus on the dates -- column name `created_at`.
+
+1.  Drop all other columns. Make new columns containing the day, month, year, and hour of the respective postings.
+
+```{r eval=FALSE}
+library(lubridate)
+
+macron_timeline <- read_csv("data/macron_timeline_221122.csv")
+
+macron_timeline %>% 
+  select(created_at) %>% 
+  mutate(year = year(created_at),
+         month = month(created_at),
+         day = day(created_at),
+         hour = hour(created_at))
+```
+
+2.  Count the occurrences of years and months (in two different tibbles). Are there any patterns? Think about how you would visualize that (BONUS: try doing it using the basic code I have provided you in the last session).
+
+```{r eval=FALSE}
+macron_years <- macron_timeline %>% 
+  mutate(year = year(created_at)) %>% 
+  count(year)
+
+macron_months <- macron_timeline %>% 
+  mutate(month = month(created_at)) %>% 
+  count(month)
+```
+
+3.  Round the dates down to the first day of the month. Why does this make more sense than just extracting the month?
+
+```{r eval=FALSE}
+macron_timeline %>% 
+  select(created_at) %>% 
+  mutate(floored_date = floor_date(created_at, "month"))
+```
+
+4.  When does the president('s account) tweet the most? Extract the time of day (using hms::as_hms()) and the weekday (using weekdays()).
+
+```{r eval=FALSE}
+library(hms)
+
+macron_timeline %>% 
+  select(created_at) %>% 
+  mutate(time_of_day = as_hms(created_at),
+         day_of_week = weekdays(created_at))
+```
+
+## Data visualization with `ggplot2`
+
+Take the [IMDb file](https://www.dropbox.com/s/81o3zzdkw737vt0/imdb2006-2016.csv?dl=1).
+
+Try to think about how you could answer the following questions graphically. If you fail, take a look at the hints.
+
+1.  Do higher rated movies generate more revenue?
+    a.  Plot revenue and rating as a scatter plot.
+    b.  Do you think there is a correlation? How could you make stronger claims about it? Maybe even graphically?
+    c.  Interpret the plot.
+    d.  Add a nice title and labels.
+2.  How evenly are the different years' movies represented? (Why would it be pointless to make claims about the productivity of directors?)
+    a.  Make a bar plot.
+    b.  Interpret the plot.
+    c.  Add a nice title and labels.
+3.  Which year was the best for cinema fetishists? (When could they watch the most highest rated movies?)
+    a.  Make a box plot.
+    b.  Interpret the plot.
+    c.  Add a nice title and labels.
+
+<details>
+
+<summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+imdb <- read_csv("imdb2006-2016.csv")
+
+#1
+imdb %>% 
+  ggplot() +
+  geom_point(aes(Rating, `Revenue (Millions)`)) +
+  geom_smooth(aes(Rating, `Revenue (Millions)`), method = "lm", se = FALSE) +
+  labs(title = "Fig. 1: Rating and Revenue; scatter plot with regression line")
+
+#2
+imdb %>% 
+  ggplot() +
+  geom_bar(aes(x = Year)) +
+  scale_x_continuous(breaks = 2006:2016) +
+  labs(y = "N",
+       title = "Fig. 2: Number of movies in the IMDb data set per year ")
+#Not evenly at all!
+#It, of course, wouldn't make sense because we're only having a sample of the data here.
+
+#3
+imdb %>% 
+  ggplot() +
+  geom_boxplot(aes(x = as_factor(Year), y = Rating)) +
+  labs(title = "Fig. 3: Boxplots depicting the movies' rating",
+       x = "Year")
+```

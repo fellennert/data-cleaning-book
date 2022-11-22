@@ -217,6 +217,11 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./exercises.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Exercises</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -321,11 +326,11 @@ Attaching package: 'lubridate'</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2022-11-21"</code></pre>
+<pre><code>[1] "2022-11-22"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">now</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2022-11-21 18:22:39 CET"</code></pre>
+<pre><code>[1] "2022-11-22 09:31:38 CET"</code></pre>
 </div>
 </div>
 </section>
@@ -444,7 +449,7 @@ Attaching package: 'lubridate'</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tz</span>(<span class="fu">now</span>(), <span class="at">tzone =</span> <span class="st">"US/Eastern"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "2022-11-21 12:22:39 EST"</code></pre>
+<pre><code>[1] "2022-11-22 03:31:38 EST"</code></pre>
 </div>
 </div>
 </section>
@@ -496,7 +501,7 @@ Attaching package: 'lubridate'</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ymd</span>(<span class="st">"2022-12-24"</span>)<span class="sc">-</span><span class="fu">today</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Time difference of 33 days</code></pre>
+<pre><code>Time difference of 32 days</code></pre>
 </div>
 </div>
 </section>
@@ -506,11 +511,11 @@ Attaching package: 'lubridate'</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">interval</span>(<span class="fu">today</span>(), <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2022-11-21 UTC--2020-12-24 UTC</code></pre>
+<pre><code>[1] 2022-11-22 UTC--2020-12-24 UTC</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">today</span>() <span class="sc">%--%</span> <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2022-11-21 UTC--2020-12-24 UTC</code></pre>
+<pre><code>[1] 2022-11-22 UTC--2020-12-24 UTC</code></pre>
 </div>
 </div>
 <p>You can divide an interval by a duration to determine its physical length:</p>
@@ -518,21 +523,21 @@ Attaching package: 'lubridate'</code></pre>
 <div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>christmas <span class="ot">&lt;-</span> <span class="fu">today</span>() <span class="sc">%--%</span> <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>)</span>
 <span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>christmas<span class="sc">/</span><span class="fu">ddays</span>(<span class="at">x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -697</code></pre>
+<pre><code>[1] -698</code></pre>
 </div>
 </div>
 <p>You can divide an interval by a period to determine its implied length in clock time:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>christmas<span class="sc">/</span><span class="fu">days</span>(<span class="at">x =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -697</code></pre>
+<pre><code>[1] -698</code></pre>
 </div>
 </div>
 <p>If you want to know its length in seconds, you can also do <code>int_length()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int_length</span>(christmas)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -60220800</code></pre>
+<pre><code>[1] -60307200</code></pre>
 </div>
 </div>
 <p>There are also some other things you can do with intervals:</p>
@@ -547,7 +552,7 @@ Attaching package: 'lubridate'</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int_flip</span>(<span class="fu">interval</span>(<span class="fu">today</span>(), <span class="fu">ymd</span>(<span class="st">"2020-12-24"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2020-12-24 UTC--2022-11-21 UTC</code></pre>
+<pre><code>[1] 2020-12-24 UTC--2022-11-22 UTC</code></pre>
 </div>
 </div>
 <p>You can also shift an interval:</p>
@@ -555,7 +560,7 @@ Attaching package: 'lubridate'</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int_shift</span>(christmas, <span class="at">by =</span> <span class="fu">days</span>(<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2022-11-22 UTC--2020-12-25 UTC</code></pre>
+<pre><code>[1] 2022-11-23 UTC--2020-12-25 UTC</code></pre>
 </div>
 </div>
 </section>

@@ -155,6 +155,11 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./exercises.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Exercises</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -169,6 +174,7 @@ div.csl-indent {
   <ul>
   <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
   <ul class="collapse">
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
   <li><a href="#some-final-introductory-remarks" id="toc-some-final-introductory-remarks" class="nav-link" data-scroll-target="#some-final-introductory-remarks">Some final introductory remarks</a></li>
   </ul></li>
   </ul>
@@ -207,14 +213,17 @@ div.csl-indent {
 
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
-<p>This is the script for a two-day workshop on data cleaning for the social sciences. I assume you to be familiar with basic R concepts such as the different data types and how to index them, the general structure of the syntax, and how to make function calls.</p>
-<p>In the 21st century, social scientists are able to tap into wells of data that are deeper than ever before. Not only can we use more designed data, i.e., data that have been generated with the clear goal of performing research using them, such as survey data, than ever. Also the rise of the internet as a sensor for human behavior provides us with new opportunities.</p>
-<p>Given their variety, these data sets may all come in different structures, and if we want to leverage them to improve our understanding of the world, we need to reshape them properly. Therefore, we are in need for tools that are capable and flexible enough to work with all different kinds of data while remaining easily accessible. In my opinion, R <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2021</a>)</span>, RStudio, and the tidyverse packages <span class="citation" data-cites="wickham_welcome_2019">(<a href="references.html#ref-wickham_welcome_2019" role="doc-biblioref">Wickham et al. 2019</a>)</span> strike a good balance here. R is a powerful, flexible, statistical programming language, RStudio serves as a convenient Graphic User Interface (GUI) which can be used freely by researchers, and, finally, the tidyverse, and its adjacent packages, are a collection of packages with concisely defined use-cases, consistent syntax that cover a wide array of data science applications from acquiring data, cleaning data, transforming data, to finally visualizing them, and using them to draw inferences on the underlying real-world data-generation processes.</p>
-<p>This script is going to introduce you to the following things: we start with the basics, i.e., the RStudio environment, projects, and how to read in data. Thereafter, I will introduce you to the idea behind “tidy data” <span class="citation" data-cites="wickham_tidy_2014">(<a href="references.html#ref-wickham_tidy_2014" role="doc-biblioref">Wickham 2014</a>)</span>. This describes a particular way of structuring data and is necessary insofar as basically all tidyverse packages require data in this structure to function properly. Then, once the data set is in a tidy format, we can delve into the actual transformation process. Finally, an extensive and thorough introduction to data visualization will be provided.</p>
-<section id="some-final-introductory-remarks" class="level3">
-<h3 class="anchored" data-anchor-id="some-final-introductory-remarks">Some final introductory remarks</h3>
-<p>This stuff is far from trivial. Just like learning a new language, mastering it requires hard and consistent effort to eventually master coding in R. In order to facilitate your learning, I will link to as many external resources as possible and provide all data sets used in the script so that you can run and adapt (“play with”) the code yourself.</p>
-<p>Let me also tell you that you will run into problems. Constantly. Therefore, googling error messages takes up considerable space in every thorough data analysis endeavor. Usually, you can just copy the error message and throw it into Google. The tricky part here is to strike a balance between staying generalizable enough (i.e., do not include your self-chosen file names or replace them by the data type, i.e., tibble or df – Data.Frame). Platforms to find help and further guidance are for instance StackOverflow and the RStudio forum.</p>
+<p>This is the script for a two-day workshop on data cleaning for the social sciences. I assume you are familiar with basic R concepts such as the different data types and how to index them, the general structure of the syntax, and how to make function calls.</p>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>In the 21st century, social scientists are able to tap into wells of data that are deeper than ever before. Not only can we use more designed data, i.e., data that have been generated with the clear goal of performing research using them in mind, e.g., survey data, than ever. Also, the rise of the internet as a sensor for human behavior provides us with new opportunities.</p>
+<p>Given their variety, these data sets may all come in different structures, and if we want to leverage them to improve our understanding of the world, we need to reshape them properly. Therefore, we are in need of tools that are capable and flexible enough to work with all different kinds of data while remaining easily accessible. In my opinion, R <span class="citation" data-cites="R-base">(<a href="references.html#ref-R-base" role="doc-biblioref">R Core Team 2021</a>)</span>, RStudio, and the <code>tidyverse</code> packages <span class="citation" data-cites="wickham_welcome_2019">(<a href="references.html#ref-wickham_welcome_2019" role="doc-biblioref">Wickham et al. 2019</a>)</span> strike a good balance here. R is a powerful, flexible, statistical programming language, RStudio serves as a convenient Graphic User Interface (GUI) that can be used by researchers free of charge, and, finally, the <code>tidyverse</code>, and also its adjacent packages, are a collection of packages with concisely defined use cases and consistent syntax that covers a wide array of data science applications from acquiring data, cleaning data, transforming data, to finally visualizing them, and using them to draw inferences on the underlying real-world data-generation processes.</p>
+<p>This script is going to introduce you to the following things: we start with the basics, i.e., the RStudio environment, Projects, and how to read data. Thereafter, I will introduce you to the idea behind “tidy data” <span class="citation" data-cites="wickham_tidy_2014">(<a href="references.html#ref-wickham_tidy_2014" role="doc-biblioref">Wickham 2014</a>)</span>. This describes a particular way of structuring data and is necessary insofar as, basically, all <code>tidyverse</code> packages require data in this structure to function properly. Then, once the data set is in a tidy format, we can delve into the actual transformation process. Finally, an introduction to data visualization will be provided.</p>
+</section>
+<section id="some-final-introductory-remarks" class="level2">
+<h2 class="anchored" data-anchor-id="some-final-introductory-remarks">Some final introductory remarks</h2>
+<p>This stuff is far from trivial. Just like learning a new language, mastering coding in R requires hard and consistent effort. In order to facilitate your learning, I will link to as many external resources as possible and provide all data sets used in the script so that you can run and adapt (“play with”) the code yourself.</p>
+<p>Let me also tell you that you will run into problems. Constantly. Therefore, googling error messages takes up considerable space in every thorough data analysis endeavor. Usually, you can just copy the error message and throw it into Google. The tricky part here is to strike a balance between staying generalizable enough (i.e., do not include your self-chosen file names or replace them with the data type, i.e., tibble or df – short for Data.Frame). Platforms to find help and further guidance are for instance StackOverflow and the RStudio forum.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
