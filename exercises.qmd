@@ -31,7 +31,7 @@ ches_2017_modified <- read_csv("ches_2017_modified.csv", skip = 4)
 
 #publishers
 publishers1 <- read_excel("publishers.xlsx", sheet = "publishers_a-l") 
-publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") %>% 
+publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") |> 
   rename(city = place)
 
 #spotify
@@ -39,28 +39,28 @@ spotify2018 <- read_csv("spotify2018.csv")
 
 #tidying
 #books
-books_tidy <- read_delim("books.txt", delim = "|") %>% 
+books_tidy <- read_delim("books.txt", delim = "|") |> 
   separate(col = "author", into= c("author_1", "author_2"), sep = " and ")
-books_tidy_rows <- read_delim("books.txt", delim = "|") %>% 
+books_tidy_rows <- read_delim("books.txt", delim = "|") |> 
   separate_rows(author, sep = c(" and "))
 
 # There also is " with " as a potential separator -- separate() only takes a sep argument of length 1. You could replace " with " with " and " beforehand using `str_replace_all` -- but more on this in Chapter 6
 
-books_really_tidy_rows <- read_delim("books.txt", delim = "|") %>% 
-  mutate(author = str_replace_all(author, pattern = c(" with " = " and "))) %>% 
+books_really_tidy_rows <- read_delim("books.txt", delim = "|") |> 
+  mutate(author = str_replace_all(author, pattern = c(" with " = " and "))) |> 
   separate_rows(author, sep = c(" and "))
 
 #ches
 ches_2017_tidy <- read_csv("ches_2017.csv")
-ches_2017_modified_tidy <- read_csv("ches_2017_modified.csv", skip = 4) %>%
+ches_2017_modified_tidy <- read_csv("ches_2017_modified.csv", skip = 4) |>
   pivot_wider(names_from = variable)
 
 #publishers
 publishers1 <- read_excel("publishers.xlsx", sheet = "publishers_a-l") 
-publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") %>% 
+publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") |> 
   rename(city = place)
 
-publishers_tidy <- bind_rows(publishers1, publishers2) %>% 
+publishers_tidy <- bind_rows(publishers1, publishers2) |> 
   separate(col = city, into = c("city", "state"), sep=", ")
 
 #spotify
@@ -111,49 +111,49 @@ my_mode <- function(x){
 imdb <- read_csv("imdb2006-2016.csv")
 
 #1 
-imdb %>% count(Title) %>% arrange(-n)
+imdb |> count(Title) |> arrange(-n)
 
 #2
-imdb %>% 
-  arrange(-`Runtime (Minutes)`) %>% 
-  slice(1) %>% 
+imdb |> 
+  arrange(-`Runtime (Minutes)`) |> 
+  slice(1) |> 
   select(Director)
 
 #3
-imdb %>% 
-  arrange(Rank) %>% 
-  slice(1) %>% 
+imdb |> 
+  arrange(Rank) |> 
+  slice(1) |> 
   select(Title)
 
 #4
-imdb %>% 
-  arrange(-Votes) %>% 
-  slice(1) %>% 
+imdb |> 
+  arrange(-Votes) |> 
+  slice(1) |> 
   select(Title)
 
 #5
-imdb %>% 
-  filter(Year == 2016) %>% 
-  arrange(-`Revenue (Millions)`) %>% 
-  slice(1) %>% 
+imdb |> 
+  filter(Year == 2016) |> 
+  arrange(-`Revenue (Millions)`) |> 
+  slice(1) |> 
   select(Title)
 
 #6
-imdb %>% 
-  filter(!is.na(`Revenue (Millions)`)) %>% 
-  group_by(Year) %>% 
+imdb |> 
+  filter(!is.na(`Revenue (Millions)`)) |> 
+  group_by(Year) |> 
   summarize(total_revenue = sum(`Revenue (Millions)`))
 
 #7a
-imdb %>% 
+imdb |> 
   filter(`Runtime (Minutes)` > mean(`Runtime (Minutes)`))
 
 #7b
-imdb %>% 
+imdb |> 
   filter(Director == "J.J. Abrams")
 
 #7c
-imdb %>% 
+imdb |> 
   filter(Votes > median(Votes))
 
 #7d
@@ -171,7 +171,7 @@ my_mode <- function(x){
     return(mod)
 }
 
-imdb %>% 
+imdb |> 
   filter(Rating == my_mode(Rating))
 ```
 
@@ -199,18 +199,18 @@ Read in the [ESS file](https://www.dropbox.com/s/c9llcbln6jui1t8/ess2016_ger.csv
 ess_2016 <- read_csv("ess2016_ger.csv")
 
 #1 
-ess_w_factor <- ess_2016 %>% 
-  mutate(party_code_fct = as_factor(party_vote)) %>% 
+ess_w_factor <- ess_2016 |> 
+  mutate(party_code_fct = as_factor(party_vote)) |> 
   select(party_code_fct)
 
 #2
-ess_w_factor %>% 
-  count(party_code_fct) %>% 
-  filter(!is.na(party_code_fct)) %>% 
+ess_w_factor |> 
+  count(party_code_fct) |> 
+  filter(!is.na(party_code_fct)) |> 
   arrange(-n)
 
 #2a
-ess_recoded <- ess_w_factor %>% 
+ess_recoded <- ess_w_factor |> 
   mutate(party_code_fct = fct_recode(party_code_fct,
                                      Other = "AfD",
                                      Other = "FDP",
@@ -221,21 +221,21 @@ ess_recoded <- ess_w_factor %>%
 # levels(ess_recoded$party_code_fct) # for validating that it has worked
 
 #2b
-ess_collapsed <- ess_w_factor %>% 
+ess_collapsed <- ess_w_factor |> 
   mutate(party_code_fct = fct_collapse(party_code_fct,
                                        Other = c("AfD", "FDP", "Andere Partei", "Piratenpartei", "NPD")))
 
 # levels(ess_collapsed$party_code_fct) # for validating that it has worked
 
 #2c
-ess_lumped <- ess_w_factor %>% 
+ess_lumped <- ess_w_factor |> 
   mutate(party_code_fct = fct_lump(party_code_fct, n = 4))
 
 # levels(ess_collapsed$party_code_fct) # for validating that it has worked
 
 #3
-ess_ordered <- ess_w_factor %>% 
-  count(party_code_fct) %>% 
+ess_ordered <- ess_w_factor |> 
+  count(party_code_fct) |> 
   mutate(party_code_fct = fct_reorder(party_code_fct, n))
 
 # levels(ess_ordered$party_code_fct) # for validating that it has worked
@@ -265,8 +265,8 @@ library(lubridate)
 
 macron_timeline <- read_csv("data/macron_timeline_221122.csv")
 
-macron_timeline %>% 
-  select(created_at) %>% 
+macron_timeline |> 
+  select(created_at) |> 
   mutate(year = year(created_at),
          month = month(created_at),
          day = day(created_at),
@@ -276,20 +276,20 @@ macron_timeline %>%
 2.  Count the occurrences of years and months (in two different tibbles). Are there any patterns? Think about how you would visualize that (BONUS: try doing it using the basic code I have provided you in the last session).
 
 ```{r eval=FALSE}
-macron_years <- macron_timeline %>% 
-  mutate(year = year(created_at)) %>% 
+macron_years <- macron_timeline |> 
+  mutate(year = year(created_at)) |> 
   count(year)
 
-macron_months <- macron_timeline %>% 
-  mutate(month = month(created_at)) %>% 
+macron_months <- macron_timeline |> 
+  mutate(month = month(created_at)) |> 
   count(month)
 ```
 
 3.  Round the dates down to the first day of the month. Why does this make more sense than just extracting the month?
 
 ```{r eval=FALSE}
-macron_timeline %>% 
-  select(created_at) %>% 
+macron_timeline |> 
+  select(created_at) |> 
   mutate(floored_date = floor_date(created_at, "month"))
 ```
 
@@ -298,8 +298,8 @@ macron_timeline %>%
 ```{r eval=FALSE}
 library(hms)
 
-macron_timeline %>% 
-  select(created_at) %>% 
+macron_timeline |> 
+  select(created_at) |> 
   mutate(time_of_day = as_hms(created_at),
          day_of_week = weekdays(created_at))
 ```
@@ -332,14 +332,14 @@ Try to think about how you could answer the following questions graphically. If 
 imdb <- read_csv("imdb2006-2016.csv")
 
 #1
-imdb %>% 
+imdb |> 
   ggplot() +
   geom_point(aes(Rating, `Revenue (Millions)`)) +
   geom_smooth(aes(Rating, `Revenue (Millions)`), method = "lm", se = FALSE) +
   labs(title = "Fig. 1: Rating and Revenue; scatter plot with regression line")
 
 #2
-imdb %>% 
+imdb |> 
   ggplot() +
   geom_bar(aes(x = Year)) +
   scale_x_continuous(breaks = 2006:2016) +
@@ -349,7 +349,7 @@ imdb %>%
 #It, of course, wouldn't make sense because we're only having a sample of the data here.
 
 #3
-imdb %>% 
+imdb |> 
   ggplot() +
   geom_boxplot(aes(x = as_factor(Year), y = Rating)) +
   labs(title = "Fig. 3: Boxplots depicting the movies' rating",
