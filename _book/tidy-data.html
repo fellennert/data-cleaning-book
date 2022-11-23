@@ -332,11 +332,11 @@ div.csl-indent {
 <pre><code># A tibble: 5 × 9
   manufacturer `3 cyl` `4 cyl` `5 cyl` `6 cyl` `8 cyl` `10 cyl` `12 cyl` 16 cy…¹
   &lt;chr&gt;          &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;
-1 Audi              20      61      10      45      22        2        2       0
-2 BMW               14      55       6      37      36        2        4       0
-3 Mercedes           1      85       3      36      31        1        4       0
-4 Opel              10      76       3      30      40        2       19       0
-5 VW                 6      56       9      32      29        8       13       0
+1 Audi              14      67      10      40      23        4        1       0
+2 BMW               13      74       1      50      24       10        6       0
+3 Mercedes          13      94       3      38      35       10        5       0
+4 Opel              16      95       2      36      21        7       13       0
+5 VW                13      64       6      49      20        5        3       0
 # … with abbreviated variable name ¹​`16 cyl`</code></pre>
 </div>
 </div>
@@ -350,16 +350,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;
- 1 Audi         3 cyl            20
- 2 Audi         4 cyl            61
+ 1 Audi         3 cyl            14
+ 2 Audi         4 cyl            67
  3 Audi         5 cyl            10
- 4 Audi         6 cyl            45
- 5 Audi         8 cyl            22
- 6 Audi         10 cyl            2
- 7 Audi         12 cyl            2
+ 4 Audi         6 cyl            40
+ 5 Audi         8 cyl            23
+ 6 Audi         10 cyl            4
+ 7 Audi         12 cyl            1
  8 Audi         16 cyl            0
- 9 BMW          3 cyl            14
-10 BMW          4 cyl            55
+ 9 BMW          3 cyl            13
+10 BMW          4 cyl            74
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -435,16 +435,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Audi                 3        20
- 2 BMW                  3        14
- 3 Mercedes             3         1
- 4 Opel                 3        10
- 5 VW                   3         6
- 6 Audi                 4        61
- 7 BMW                  4        55
- 8 Mercedes             4        85
- 9 Opel                 4        76
-10 VW                   4        56
+ 1 Audi                 3        14
+ 2 BMW                  3        13
+ 3 Mercedes             3        13
+ 4 Opel                 3        16
+ 5 VW                   3        13
+ 6 Audi                 4        67
+ 7 BMW                  4        74
+ 8 Mercedes             4        94
+ 9 Opel                 4        95
+10 VW                   4        64
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -459,16 +459,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Audi                 3        20
- 2 BMW                  3        14
- 3 Mercedes             3         1
- 4 Opel                 3        10
- 5 VW                   3         6
- 6 Audi                 4        61
- 7 BMW                  4        55
- 8 Mercedes             4        85
- 9 Opel                 4        76
-10 VW                   4        56
+ 1 Audi                 3        14
+ 2 BMW                  3        13
+ 3 Mercedes             3        13
+ 4 Opel                 3        16
+ 5 VW                   3        13
+ 6 Audi                 4        67
+ 7 BMW                  4        74
+ 8 Mercedes             4        94
+ 9 Opel                 4        95
+10 VW                   4        64
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -479,16 +479,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Audi                 3        20
- 2 BMW                  3        14
- 3 Mercedes             3         1
- 4 Opel                 3        10
- 5 VW                   3         6
- 6 Audi                 4        61
- 7 BMW                  4        55
- 8 Mercedes             4        85
- 9 Opel                 4        76
-10 VW                   4        56
+ 1 Audi                 3        14
+ 2 BMW                  3        13
+ 3 Mercedes             3        13
+ 4 Opel                 3        16
+ 5 VW                   3        13
+ 6 Audi                 4        67
+ 7 BMW                  4        74
+ 8 Mercedes             4        94
+ 9 Opel                 4        95
+10 VW                   4        64
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -506,18 +506,18 @@ lm(formula = frequency ~ cylinders, data = ger_car_manufacturer_longer_sep_cyl)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--32.598 -13.676   1.107  10.496  54.072 
+-30.816 -14.202  -1.625   7.914  59.953 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  41.6065     6.8110   6.109 4.04e-07 ***
-cylinders    -2.6696     0.7556  -3.533   0.0011 ** 
+(Intercept)  47.9685     7.7117   6.220 2.84e-07 ***
+cylinders    -3.2304     0.8555  -3.776 0.000546 ***
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 19.85 on 38 degrees of freedom
-Multiple R-squared:  0.2473,    Adjusted R-squared:  0.2274 
-F-statistic: 12.48 on 1 and 38 DF,  p-value: 0.001097</code></pre>
+Residual standard error: 22.47 on 38 degrees of freedom
+Multiple R-squared:  0.2728,    Adjusted R-squared:  0.2537 
+F-statistic: 14.26 on 1 and 38 DF,  p-value: 0.0005457</code></pre>
 </div>
 </div>
 <p>As <code>|&gt;</code> is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.</p>

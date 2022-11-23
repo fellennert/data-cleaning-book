@@ -351,9 +351,11 @@ ggsave("mtcars.pdf", width = 20, height = 20, units = "cm") #change unit using t
 
 ## Further readings
 
+-   [ggplot2 cheatsheet.](https://github.com/rstudio/cheatsheets/blob/main/data-visualization-2.1.pdf)
 -   [ggplot2 -- the book.](https://ggplot2-book.org)
 -   The [graphic cookbook for R](http://www.cookbook-r.com/Graphs/).
 -   Another [tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
 -   A [full-on online course by Kieran Healy](https://socviz.co) (comes with an R package as well).
+-   Need some inspiration? Check out the [graph gallery](https://r-graph-gallery.com).
 -   The `ggsave()` function [in further detail](https://ggplot2.tidyverse.org/reference/ggsave.html).
 -   You can also consult the `introverse` package. `introverse::show_topics("ggplot2")` will give you overviews of the respective package's functions, and `get_help("name of function")` will help you with the respective function.
