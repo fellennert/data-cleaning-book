@@ -22,7 +22,8 @@ publishers_filtered <- publishers |>
 This implies that you start with a base layer -- the initial `ggplot2` call.
 
 ```{r}
-ggplot(data = publishers_filtered)
+publishers_filtered |> 
+ggplot()
 ```
 
 The initial call produces an empty coordinate system. It can be filled with additional layers.
@@ -123,14 +124,16 @@ If you don't like dots, the `shape =` argument allows you to change the shape of
 
 ```{r}
 ggplot(data = county_data_midwest) +
-  geom_point(aes(x = per_dem_2016, y = per_gop_2016), shape = "cross", size = 2)
+  geom_point(aes(x = per_dem_2016, y = per_gop_2016), 
+             shape = "cross", 
+             size = 2)
 ```
 
 Here, it might make sense to color the points according to a categorical variable (state, in this case). If so, a legend is added which maps the colors to their respective values.
 
 ```{r}
 ggplot(data = county_data_midwest) +
-  geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state))
+  geom_point(aes(x = per_dem_2016, y = per_gop_2016)) 
 ```
 
 Since I look at the relationship between votes for the Republicans and the Democrats, and the U.S. is a two-party system, there is a fairly clear relationship between them both. This can also be depicted using `geom_smooth()`:
@@ -146,7 +149,7 @@ If you do not want it to be smoothed, just use `geom_line()`.
 
 ```{r}
 ggplot(data = county_data_midwest) +
-  geom_line(aes(x = per_dem_2016, y = per_gop_2016), color = "grey")
+  geom_line(aes(x = per_dem_2016, y = per_gop_2016), color = "grey") 
 ```
 
 ##### Discrete X, continuous Y
@@ -202,9 +205,11 @@ socviz::county_data |>
   filter(state %in% c("IA", "IL", "IN", "KS")) |> 
   ggplot() +
     geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state)) +
-    scale_color_manual(values = c("IA" = "blue", "IL" = "green", "IN" = "red", "KS" = "purple"),
+    scale_color_manual(values = c("IA" = "blue", 
+                                  "IL" = "green", 
+                                  "IN" = "red", 
+                                  "KS" = "purple"),
                        name = "State",
-                       breaks = waiver(),
                        labels = c("Iowa", "Illinois", "Indiana", "Kansas")) 
 ```
 
@@ -217,7 +222,10 @@ socviz::county_data |>
   filter(state %in% c("IA", "IL", "IN", "KS")) |> 
   ggplot() +
     geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state)) +
-    scale_color_manual(values = c("IA" = "blue", "IL" = "green", "IN" = "red", "KS" = "purple"),
+    scale_color_manual(values = c("IA" = "blue", 
+                                  "IL" = "green", 
+                                  "IN" = "red", 
+                                  "KS" = "purple"),
                        name = "State",
                        breaks = waiver(),
                        labels = c("Iowa", "Illinois", "Indiana", "Kansas")) +
@@ -290,11 +298,11 @@ socviz::county_data |>
     scale_y_continuous(limits = c(0, 1)) +
     scale_color_gradient(low = "green",
                          high = "red") +
-    facet_wrap(~census_region,
+    facet_wrap(vars(census_region),
                nrow = 2)
 ```
 
-Apart from that, I can also spread it out using two different variables. Here, I will look at differences in the distribution of males and females in the counties split up by who won in 2016 and 2012. This can be achieved using `facet_grid(categorical_variable_1~categorical_variable_2)`. The former one will be put into rows, the latter into columns.
+Apart from that, I can also spread it out using two different variables. Here, I will look at differences in the distribution of whites in the counties split up by who won in 2016 and 2012. This can be achieved using `facet_grid(categorical_variable_1~categorical_variable_2)`. The former one will be put into rows, the latter into columns.
 
 ```{r}
 socviz::county_data |> 

@@ -116,7 +116,7 @@ Here, you only need to specify the columns you fetch the names and values from. 
 Now, however, there is a problem with the cylinders: their number should be depicted in a numeric vector. We could achieve this by either parsing it to a numeric vector:
 
 ```{r}
-parse_number(ger_car_manufacturer_longer$cylinders)
+ger_car_manufacturer_longer$cylinders <- parse_number(ger_car_manufacturer_longer$cylinders)
 ```
 
 On the other hand, we can also use a handy function from `tidyr` called `separate()` and afterwards drop the unnecessary column:
@@ -213,5 +213,3 @@ Here, the final variant of creating tibbles is introduced as well: you can apply
 
 -   Hadley on [tidy data](https://vita.had.co.nz/papers/tidy-data.pdf)\
 -   The two `pivot_*()` functions lie at the heart of `tidyr`. [This article](https://www.storybench.org/pivoting-data-from-columns-to-rows-and-back-in-the-tidyverse/) from the Northeastern University's School of Journalism explains it in further detail.
-
-## References

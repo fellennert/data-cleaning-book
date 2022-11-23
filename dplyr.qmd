@@ -87,8 +87,8 @@ imdb_raw |>
 imdb_selected <- imdb_raw |> 
   select(Title, Director, Votes, Year, starts_with("R")) |> 
   select(-Rank) |> 
-  rename(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) |> 
-  glimpse()
+  rename(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) #|> 
+  #glimpse()
 ```
 
 As you may have noticed, the order in the `select()` matters: columns will be ordered in the same order as they are chosen.
@@ -197,6 +197,12 @@ imdb_selected |>
   glimpse()
 ```
 
+```{r}
+imdb_selected |> 
+  slice_min(revenue_million, n = 10) |> 
+  glimpse()
+```
+
 `distinct` removes duplicate rows:
 
 ```{r}
@@ -254,9 +260,9 @@ imdb_selected |>
 
 Keep in mind that you can throw any function into `mutate()` as long as it is vectorized and the output has the same length as the tibble or 1.
 
-### `summarize()` and `group_by`
+### `summarize()` and `group_by()`
 
-When you analyze data, you often want to compare entities according to some sort of summary statistic. This means that you, first, need to split up your data set into certain groups which share one or more characteristics, and, second, collapse the columns together into single-row summaries. The former challenge is accomplished using `group_by()` whose argument is one or more variables, the latter requires the `summarize()` function. This function works similar to `mutate()` but uses *summary functions* -- which take a vector of multiple values and return a single value -- instead of window functions -- which return a vector of the same length as the input.
+When you analyze data, you often want to compare entities according to some sort of summary statistic. This means that you, first, need to split up your data set into certain groups which share one or more characteristics, and, second, collapse the rows together into single-row summaries. The former challenge is accomplished using `group_by()` whose argument is one or more variables, the latter requires the `summarize()` function. This function works similar to `mutate()` but uses *summary functions* -- which take a vector of multiple values and return a single value -- instead of window functions -- which return a vector of the same length as the input.
 
 Let me provide you an example.
 
@@ -264,8 +270,9 @@ I am interested in the director's average ratings:
 
 ```{r}
 imdb_selected |> 
-  group_by(director) |> 
-  summarize(avg_rating = mean(rating))
+  group_by(director, year) |> 
+  summarize(avg_rating = mean(rating),
+            avg_revenue = mean(revenue_million, na.rm = TRUE))
 ```
 
 In general, `summarize()` always works like this: first, you change the scope from the entire tibble to different groups. Then, you calculate your summary. If you then want to further manipulate your date or calculate something else based on the new summary, you need to call `ungroup()`.
@@ -302,7 +309,7 @@ All right, Jason Friedberg is apparently the director of the worst rated movie i
 imdb_selected |> 
   group_by(director) |> 
   summarize(avg_rating = mean(rating)) |> 
-  arrange(-avg_rating)
+  arrange(desc(avg_rating))
 ```
 
 Chapeau, Nitesh Tiwari!
@@ -333,8 +340,9 @@ Here, you can immediately see the problem: it contains two types of observations
 
 ```{r}
 song_tbl <- billboard |> 
-  distinct(artist, track) |> 
-  mutate(song_id = row_number())
+  rowid_to_column("song_id") |> 
+  distinct(artist, track, .keep_all = TRUE) |> 
+  select(song_id:track)
 
 glimpse(song_tbl)
 ```

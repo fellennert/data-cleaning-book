@@ -8,6 +8,7 @@ library(lubridate)
 ymd("2000-02-29")
 ymd("2000 02 29")
 dmy("29.02.2000")
+mdy("02-29-2000")
 ```
 
 There is also a function for quarters:
@@ -151,7 +152,7 @@ today() %--% ymd("2020-12-24")
 You can divide an interval by a duration to determine its physical length:
 
 ```{r}
-christmas <- today() %--% ymd("2020-12-24")
+christmas <- today() %--% ymd("2022-12-24")
 christmas/ddays(x = 1)
 ```
 

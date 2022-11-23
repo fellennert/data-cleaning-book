@@ -4,7 +4,7 @@ project:
 book:
   title: "Data cleaning for social scientists"
   author: "Felix Lennert"
-  date: "2022-11-21"
+  date: "2022-11-23"
   chapters:
     - index.qmd
     - projects.qmd

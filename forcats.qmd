@@ -17,6 +17,7 @@ parties <- c("AfD", "CDU", "CSU", "FDP", "Greens", "Leftists", "SPD")
 parties_fct <- as_factor(parties)
 
 typeof(parties_fct)
+levels(parties_fct)
 ```
 
 2.  Create it from scratch by providing levels and a vector respectively
@@ -163,7 +164,7 @@ election_data_w_fct |>
 The problem here is that Gary Johnson appears as often as the two other candidates (have you ever heard of him?). Hence, `fct_lump()` cannot decide which levels to lump together. However, it has saved me a couple lines of code:
 
 ```{r}
-election_data_w_fct |> 
+test <- election_data_w_fct |> 
   mutate(candidate = fct_lump(candidate, n = 2) |> 
            fct_recode("Other" = "Gary Johnson"))
 ```

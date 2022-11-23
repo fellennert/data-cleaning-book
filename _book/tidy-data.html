@@ -241,7 +241,6 @@ div.csl-indent {
   <li><a href="#further-functionalities" id="toc-further-functionalities" class="nav-link" data-scroll-target="#further-functionalities"><span class="toc-section-number">3.1.3</span>  Further functionalities</a></li>
   </ul></li>
   <li><a href="#further-links" id="toc-further-links" class="nav-link" data-scroll-target="#further-links"><span class="toc-section-number">3.2</span>  Further links</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">3.3</span>  References</a></li>
   </ul>
 </nav>
     </div>
@@ -333,11 +332,11 @@ div.csl-indent {
 <pre><code># A tibble: 5 × 9
   manufacturer `3 cyl` `4 cyl` `5 cyl` `6 cyl` `8 cyl` `10 cyl` `12 cyl` 16 cy…¹
   &lt;chr&gt;          &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;   &lt;dbl&gt;
-1 Audi               1      99       2      45      31        3       10       0
-2 BMW                7      61       1      41      39        9       20       0
-3 Mercedes           7      55       8      44      28        1        9       0
-4 Opel              13      93       9      43      21        2       19       0
-5 VW                16      62       7      35      39        4       11       0
+1 Audi               3      57       3      35      23        9       11       0
+2 BMW                8      66      10      49      32        3        8       0
+3 Mercedes          16      67       4      49      28        5        4       0
+4 Opel               1      50      10      41      25        7        6       0
+5 VW                12      79       3      46      29        8        9       0
 # … with abbreviated variable name ¹​`16 cyl`</code></pre>
 </div>
 </div>
@@ -351,16 +350,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;
- 1 Audi         3 cyl             1
- 2 Audi         4 cyl            99
- 3 Audi         5 cyl             2
- 4 Audi         6 cyl            45
- 5 Audi         8 cyl            31
- 6 Audi         10 cyl            3
- 7 Audi         12 cyl           10
+ 1 Audi         3 cyl             3
+ 2 Audi         4 cyl            57
+ 3 Audi         5 cyl             3
+ 4 Audi         6 cyl            35
+ 5 Audi         8 cyl            23
+ 6 Audi         10 cyl            9
+ 7 Audi         12 cyl           11
  8 Audi         16 cyl            0
- 9 BMW          3 cyl             7
-10 BMW          4 cyl            61
+ 9 BMW          3 cyl             8
+10 BMW          4 cyl            66
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -412,17 +411,17 @@ div.csl-indent {
 <h4 data-number="3.1.1.3" class="anchored" data-anchor-id="multiple-variables-in-one-column"><span class="header-section-number">3.1.1.3</span> Multiple variables in one column</h4>
 <p>Now, however, there is a problem with the cylinders: their number should be depicted in a numeric vector. We could achieve this by either parsing it to a numeric vector:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_number</span>(ger_car_manufacturer_longer<span class="sc">$</span>cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1]  3  4  5  6  8 10 12 16  3  4  5  6  8 10 12 16  3  4  5  6  8 10 12 16  3
-[26]  4  5  6  8 10 12 16  3  4  5  6  8 10 12 16</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer<span class="sc">$</span>cylinders <span class="ot">&lt;-</span> <span class="fu">parse_number</span>(ger_car_manufacturer_longer<span class="sc">$</span>cylinders)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>On the other hand, we can also use a handy function from <code>tidyr</code> called <code>separate()</code> and afterwards drop the unnecessary column:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="ot">&lt;-</span> ger_car_manufacturer_longer <span class="sc">|&gt;</span> <span class="co"># first, take the tibble</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(cylinders, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"cylinders"</span>, <span class="st">"drop_it"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span> <span class="co"># and then split the column "cylinders" into two</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drop_it) <span class="co"># you will learn about this in the lesson on dplyr  # and then drop one column from the tibble</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="ot">&lt;-</span> ger_car_manufacturer_longer <span class="sc">|&gt;</span> <span class="co"># first, take the tibble</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(cylinders, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"cylinders"</span>, <span class="st">"drop_it"</span>), <span class="at">sep =</span> <span class="st">" "</span>) <span class="sc">|&gt;</span> <span class="co"># and then split the column "cylinders" into two</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>drop_it) <span class="co"># you will learn about this in the lesson on dplyr  # and then drop one column from the tibble</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 2 pieces. Missing pieces filled with `NA` in 40 rows [1, 2, 3,
+4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].</code></pre>
+</div>
 </div>
 <p>If there are two (or actually more) relevant values in one column, you can simply let out the dropping process and easily split them into multiple columns. By default, the <code>sep =</code> argument divides the content by all non-alphanumeric characters (every character that is not a letter, number, or space) it contains.</p>
 <p>Please note that the new column is still in character format. We can change this using <code>as.numeric()</code>:</p>
@@ -436,16 +435,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Audi                 3         1
- 2 BMW                  3         7
- 3 Mercedes             3         7
- 4 Opel                 3        13
- 5 VW                   3        16
- 6 Audi                 4        99
- 7 BMW                  4        61
- 8 Mercedes             4        55
- 9 Opel                 4        93
-10 VW                   4        62
+ 1 Audi                 3         3
+ 2 BMW                  3         8
+ 3 Mercedes             3        16
+ 4 Opel                 3         1
+ 5 VW                   3        12
+ 6 Audi                 4        57
+ 7 BMW                  4        66
+ 8 Mercedes             4        67
+ 9 Opel                 4        50
+10 VW                   4        79
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -460,16 +459,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Audi                 3         1
- 2 BMW                  3         7
- 3 Mercedes             3         7
- 4 Opel                 3        13
- 5 VW                   3        16
- 6 Audi                 4        99
- 7 BMW                  4        61
- 8 Mercedes             4        55
- 9 Opel                 4        93
-10 VW                   4        62
+ 1 Audi                 3         3
+ 2 BMW                  3         8
+ 3 Mercedes             3        16
+ 4 Opel                 3         1
+ 5 VW                   3        12
+ 6 Audi                 4        57
+ 7 BMW                  4        66
+ 8 Mercedes             4        67
+ 9 Opel                 4        50
+10 VW                   4        79
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -480,16 +479,16 @@ div.csl-indent {
 <pre><code># A tibble: 40 × 3
    manufacturer cylinders frequency
    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
- 1 Audi                 3         1
- 2 BMW                  3         7
- 3 Mercedes             3         7
- 4 Opel                 3        13
- 5 VW                   3        16
- 6 Audi                 4        99
- 7 BMW                  4        61
- 8 Mercedes             4        55
- 9 Opel                 4        93
-10 VW                   4        62
+ 1 Audi                 3         3
+ 2 BMW                  3         8
+ 3 Mercedes             3        16
+ 4 Opel                 3         1
+ 5 VW                   3        12
+ 6 Audi                 4        57
+ 7 BMW                  4        66
+ 8 Mercedes             4        67
+ 9 Opel                 4        50
+10 VW                   4        79
 # … with 30 more rows</code></pre>
 </div>
 </div>
@@ -507,18 +506,18 @@ lm(formula = frequency ~ cylinders, data = ger_car_manufacturer_longer_sep_cyl)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
--35.020 -16.943  -0.543  13.667  65.709 
+-32.371 -13.501   0.354   9.959  48.223 
 
 Coefficients:
             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  44.2069     7.8165   5.656 1.69e-06 ***
-cylinders    -2.7290     0.8672  -3.147   0.0032 ** 
+(Intercept)  41.1536     6.6860   6.155 3.49e-07 ***
+cylinders    -2.5942     0.7417  -3.497  0.00121 ** 
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-Residual standard error: 22.78 on 38 degrees of freedom
-Multiple R-squared:  0.2067,    Adjusted R-squared:  0.1859 
-F-statistic: 9.904 on 1 and 38 DF,  p-value: 0.003203</code></pre>
+Residual standard error: 19.48 on 38 degrees of freedom
+Multiple R-squared:  0.2435,    Adjusted R-squared:  0.2236 
+F-statistic: 12.23 on 1 and 38 DF,  p-value: 0.001214</code></pre>
 </div>
 </div>
 <p>As <code>|&gt;</code> is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.</p>
@@ -582,9 +581,6 @@ F-statistic: 9.904 on 1 and 38 DF,  p-value: 0.003203</code></pre>
 </li>
 <li>The two <code>pivot_*()</code> functions lie at the heart of <code>tidyr</code>. <a href="https://www.storybench.org/pivoting-data-from-columns-to-rows-and-back-in-the-tidyverse/">This article</a> from the Northeastern University’s School of Journalism explains it in further detail.</li>
 </ul>
-</section>
-<section id="references" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="references"><span class="header-section-number">3.3</span> References</h2>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">

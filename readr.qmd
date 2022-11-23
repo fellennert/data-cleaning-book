@@ -8,7 +8,7 @@ The following unordered list shows the most common `read_*()` functions. Usually
 -   `read_csv2("file.csv")` reads semi-colon delimited files and treats commas as decimal separator\
 -   `read_delim("file.txt", delim = "|")` reads files which are delimited by whatever delimiter you specify (`|` in this case)\
 -   `read_fwf("file.fwf", col_positions = c(1, 3, 5))` reads fixed width files. Here, some sort of data on the columns must be provided, e.g., their positions in the file\
--   If the values are separated by whitespace, you can also use `read_tsv("file.tsv")` or `read_table("file.tsv")`
+-   If the values are separated by white space, you can also use `read_tsv("file.tsv")` or `read_table("file.tsv")`
 
 ## ...and their additional arguments
 
@@ -18,7 +18,7 @@ Also, all these functions share certain arguments which just need to be included
 -   If your file does not have column names, but you want the resulting Tibble to have some, you can specify them with `col_names = c("a", "b", "c")`. It takes a character vector.\
 -   If there are rows you do not want to be considered, you can use `skip =`. For instance, `read_csv("file.csv", skip = 6)` reads everything but the first six data rows (the very first row is not taken into consideration as well)\
 -   Sometimes the original creator of your data set might go across missing values differently than you would want it to. `na =` can be used to specify which values shall be considered missing. If your missings are coded as 99 and 999, for instance, you can address that in the read-in process already by using `read_csv("file.csv", na = c("99", "999"))`. Please note that it takes a character vector as argument\
--   In some data sets, the first rows consists of comments that start with particular signs or special characters. Using `comment =` allows you to skip these lines. For instance, `read_csv("file.csv", comment = "#")` drops all the rows that beginn with a hash.
+-   In some data sets, the first rows consists of comments that start with particular signs or special characters. Using `comment =` allows you to skip these lines. For instance, `read_csv("file.csv", comment = "#")` drops all the rows that begin with a hash.
 
 ### Column types
 
@@ -59,7 +59,7 @@ Well...
 -   Special characters (\$, %, §, €)\
 -   So-called grouping characters such as 1,000,000 (USA) or 1.000.000 (Germany) or 1'000'000 (Switzerland)
 
-The problem with decimale points (-- and commas) can be addresses by specifying a `locale`. Compare:
+The problem with decimal points (-- and commas) can be addresses by specifying a `locale`. Compare:
 
 ```{r}
 parse_double("1,3")
@@ -145,7 +145,7 @@ problems(challenge)
 When looking at the parsing failures here, what catches the eye is that the first 1000 values of `challenge$y` seem to be NA. Because `readr` only takes the first 1000 rows into account, it parses `challenge$y` as `logical`. However, it should be considered a `date` column. You can specify this using `col_types =`:
 
 ```{r}
-challenge_w_date <- read_csv(readr_example("challenge.csv"),
+challenge_w_date <- read_csv("/Library/Frameworks/R.framework/Versions/4.2-arm64/Resources/library/readr/extdata/challenge.csv",
                              col_types = cols(
                                x = col_number(),
                                y = col_date()
@@ -160,6 +160,8 @@ First, read in your data set:
 
 ```{r}
 challenge <- read_csv(readr_example("challenge.csv"))
+
+spec(challenge)
 ```
 
 Second, you can copy the column specification from the output to your clipboard:
@@ -218,7 +220,7 @@ Sometimes, however, it might be impossible to create a `.csv` file of your data 
 
 ### `save()`
 
-Akin to `.rds` files are `.RData` files. They can contain multiple objects and be written using `save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")`. You can save your entire workspace as well by calling `save.image(file = "file.RData")`.
+Akin to `.rds` files are `.RData` files. They can contain multiple objects and be written using `save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")`. You can save your entire work space as well by calling `save.image(file = "file.RData")`.
 
 ## Alternative ways to read in and write data
 
@@ -244,7 +246,7 @@ More on the `readxl` package can be found [here](https://readxl.tidyverse.org).
 
 ### `vroom`
 
-`vroom` [@hester_vroom_2020] has been introduced recently. It claims to be able to read in delimited files with up to 1.4 GB/s. Regarding its arguments, `vroom` works in the same way as the `read_*()` functions from the `readr` package. I would recommend you to use `vroom` as soon as your dataset's size exceeds \~100 MB.
+`vroom` [@hester_vroom_2020] has been introduced recently. It claims to be able to read in delimited files with up to 1.4 GB/s. Regarding its arguments, `vroom` works in the same way as the `read_*()` functions from the `readr` package. I would recommend you to use `vroom` as soon as your data set's size exceeds \~100 MB.
 
 More on `vroom` [here](https://vroom.r-lib.org/reference/vroom.html) and [here](https://dcl-wrangle.stanford.edu/read-write.html).
 
@@ -253,5 +255,4 @@ More on `vroom` [here](https://vroom.r-lib.org/reference/vroom.html) and [here](
 -   [Information on working directories](https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces)\
 -   Websites of the singular packages: [readr](https://readr.tidyverse.org), [haven](https://haven.tidyverse.org), [readxl](https://readxl.tidyverse.org), [vroom](https://vroom.r-lib.org)\
 -   `readr` [Cheatsheet](https://rawgit.com/rstudio/cheatsheets/master/data-import.pdf)\
--   Chapter in R for Data Science [@wickham2016] regarding [data import](https://r4ds.had.co.nz/data-import.html)
-
+-   Chapter in R for Data Science [@wickham_r_2016-1] regarding [data import](https://r4ds.had.co.nz/data-import.html)
